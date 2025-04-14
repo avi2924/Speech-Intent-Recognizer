@@ -1,0 +1,6 @@
+torch==2.0.0+cu118  # Ensure you are using the appropriate version for your GPU
+torchaudio==2.0.2
+transformers==4.28.0
+sklearn==1.0.0
+pyaudio==0.2.11
+pyyaml==5.4.1
