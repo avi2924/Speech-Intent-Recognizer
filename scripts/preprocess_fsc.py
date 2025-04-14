@@ -1,42 +1,57 @@
 import os
+import csv
+import json
+import argparse
 import pandas as pd
-import torchaudio
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-import numpy as np
 
-# Define paths
-data_dir = 'data/FSC/'
-output_dir = 'data/processed/'
+def build_label_map(intents):
+    unique_intents = sorted(set(intents))
+    return {intent: idx for idx, intent in enumerate(unique_intents)}
 
-def preprocess_data():
-    audio_files = []
-    labels = []
+def preprocess_fsc_dataset(meta_csv_paths, output_csv, label_map_path):
+    data = []
+    all_intents = []
+    base_dir = 'data/FSC/fluent_speech_commands_dataset'  # Add this line
 
-    for label in os.listdir(data_dir):
-        if os.path.isdir(os.path.join(data_dir, label)):
-            for file in os.listdir(os.path.join(data_dir, label)):
-                if file.endswith('.wav'):
-                    audio_files.append(os.path.join(data_dir, label, file))
-                    labels.append(label)
+    for csv_path in meta_csv_paths:
+        df = pd.read_csv(csv_path)
+        for _, row in df.iterrows():
+            wav_path = row['path']
+            # Add the base directory to the path
+            full_path = os.path.join(base_dir, wav_path).replace('\\', '/')
+            # Create intent string from slots
+            intent = f"{row['action']} {row['object']} {row['location']}"
+            data.append((full_path, intent))  # Store the full path
+            all_intents.append(intent)
 
-    # Encode labels
-    label_encoder = LabelEncoder()
-    encoded_labels = label_encoder.fit_transform(labels)
+    # Create label map
+    label_map = build_label_map(all_intents)
+    with open(label_map_path, 'w') as f:
+        json.dump(label_map, f, indent=2)
 
-    # Split data into training and validation
-    train_files, val_files, train_labels, val_labels = train_test_split(audio_files, encoded_labels, test_size=0.1)
+    # Save CSV with audio path and encoded label
+    with open(output_csv, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['audio_path', 'label'])
+        for path, intent in data:
+            writer.writerow([path, label_map[intent]])
 
-    # Save processed data
-    processed_data = {
-        'file': train_files + val_files,
-        'label': list(train_labels) + list(val_labels)
-    }
+    print(f"Preprocessing complete. CSV saved to {output_csv}")
+    print(f"Label map saved to {label_map_path}")
 
-    df = pd.DataFrame(processed_data)
-    df.to_csv(os.path.join(output_dir, 'processed.csv'), index=False)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--train_csv', type=str, default='data/FSC/fluent_speech_commands_dataset/data/train_data.csv')
+    parser.add_argument('--valid_csv', type=str, default='data/FSC/fluent_speech_commands_dataset/data/valid_data.csv')
+    parser.add_argument('--test_csv', type=str, default='data/FSC/fluent_speech_commands_dataset/data/test_data.csv')
+    parser.add_argument('--output_csv', type=str, default='data/processed/processed.csv')
+    parser.add_argument('--label_map_path', type=str, default='data/processed/label_map.json')
+    args = parser.parse_args()
 
-    print("Preprocessing completed. Data saved to:", os.path.join(output_dir, 'processed.csv'))
+    os.makedirs(os.path.dirname(args.output_csv), exist_ok=True)
 
-if __name__ == "__main__":
-    preprocess_data()
+    preprocess_fsc_dataset(
+        [args.train_csv, args.valid_csv, args.test_csv],
+        args.output_csv,
+        args.label_map_path
+    )
