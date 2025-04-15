@@ -1,4 +1,5 @@
 import os
+import logging
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -11,6 +12,17 @@ from tqdm import tqdm
 import argparse
 import json
 import numpy as np
+
+
+# Set up logging
+log_file = "training.log"
+logging.basicConfig(
+    filename=log_file,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode="a"  # Append to the log file
+)
+logger = logging.getLogger()
 
 
 def collate_fn(batch):
@@ -41,6 +53,7 @@ def collate_fn(batch):
 def train(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+    logger.info(f"Using device: {device}")
 
     # Load full dataset
     full_dataset = FSCIntentDataset(
@@ -88,11 +101,14 @@ def train(args):
         train_acc = accuracy_score(all_labels, all_preds)
         val_acc = evaluate(model, val_loader, device)
 
+        # Log training and validation metrics
+        logger.info(f"Epoch {epoch+1}/{args.epochs} | Train Loss: {sum(train_losses)/len(train_losses):.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
         print(f"Epoch {epoch+1} | Train Loss: {sum(train_losses)/len(train_losses):.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             torch.save(model.state_dict(), os.path.join(args.checkpoint_dir, "best_model.pt"))
+            logger.info(f"✅ Best model saved at epoch {epoch+1} with Val Acc: {val_acc:.4f}")
             print("✅ Best model saved!")
 
 
@@ -120,4 +136,7 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint_dir', type=str, default='checkpoints/')
     args = parser.parse_args()
 
+    # Log the start of training
+    logger.info(f"Starting training with args: {args}")
     train(args)
+    logger.info("Training completed.")
