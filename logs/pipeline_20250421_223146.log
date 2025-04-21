@@ -1,0 +1,99 @@
+2025-04-21 22:31:46,395 - INFO - Starting Speech Intent Recognition Pipeline
+2025-04-21 22:31:46,395 - INFO - Arguments: Namespace(train_csv='data/FSC/fluent_speech_commands_dataset/data/train_data.csv', valid_csv='data/FSC/fluent_speech_commands_dataset/data/valid_data.csv', test_csv='data/FSC/fluent_speech_commands_dataset/data/test_data.csv', output_dir='data/processed', config_path='configs/config.yaml')
+2025-04-21 22:31:46,395 - INFO - Configuration: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': '3e-5', 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 22:31:46,397 - INFO - === STEP 1: PREPROCESSING DATA ===
+2025-04-21 22:31:46,397 - INFO - Starting: Data Preprocessing
+2025-04-21 22:31:46,397 - INFO - Command: python -m scripts.preprocess_fsc --train_csv data/FSC/fluent_speech_commands_dataset/data/train_data.csv --valid_csv data/FSC/fluent_speech_commands_dataset/data/valid_data.csv --test_csv data/FSC/fluent_speech_commands_dataset/data/test_data.csv --output_dir data/processed --label_map_path data/processed/label_map.json
+2025-04-21 22:31:48,554 - INFO - Preprocessing complete.
+2025-04-21 22:31:48,554 - INFO - Train CSV saved to data/processed\train_data.csv
+2025-04-21 22:31:48,554 - INFO - Validation CSV saved to data/processed\valid_data.csv
+2025-04-21 22:31:48,554 - INFO - Test CSV saved to data/processed\test_data.csv
+2025-04-21 22:31:48,555 - INFO - Label map saved to data/processed/label_map.json
+2025-04-21 22:31:48,632 - INFO - Completed: Data Preprocessing in 2.24 seconds
+2025-04-21 22:31:48,633 - INFO - === STEP 2: TRAINING MODEL ===
+2025-04-21 22:31:48,633 - INFO - Starting: Model Training
+2025-04-21 22:31:48,633 - INFO - Command: python -m scripts.train --config configs/config.yaml --train_csv data/processed/train_data.csv --val_csv data/processed/valid_data.csv --label_map data/processed/label_map.json
+2025-04-21 22:33:59,919 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\47f5ff60-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\47f5ff60-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,920 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\4a0a6070-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\4a0a6070-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,920 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\071124c0-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\071124c0-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,920 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NWAAAQQZDXC5b9Mk\23f40d60-4450-11e9-beaa-1f3e1eab7bff.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NWAAAQQZDXC5b9Mk\\23f40d60-4450-11e9-beaa-1f3e1eab7bff.wav': Format not recognised.
+2025-04-21 22:33:59,920 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\45b390d0-45d4-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\45b390d0-45d4-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,921 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\45bfe580-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\45bfe580-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,921 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\4c35f300-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\4c35f300-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,921 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\4da4f3b0-45d4-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\4da4f3b0-45d4-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,921 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\486b0fb0-45d4-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\486b0fb0-45d4-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,921 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\43c782d0-45d5-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\43c782d0-45d5-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,922 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\50289150-45d4-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\50289150-45d4-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,922 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\4b18a380-45d4-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\4b18a380-45d4-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:33:59,922 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\09cf0c40-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\09cf0c40-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:33:59,923 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\neaPN7GbBEUex8rV\4e463560-45d7-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\neaPN7GbBEUex8rV\\4e463560-45d7-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:34:34,895 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\31930c40-45d2-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\31930c40-45d2-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:34:34,896 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\370edb40-45d2-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\370edb40-45d2-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:34:34,896 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\31a7ab10-45e5-11e9-b578-494a5b19ab8b.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\31a7ab10-45e5-11e9-b578-494a5b19ab8b.wav': Format not recognised.
+2025-04-21 22:34:34,897 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\3332f410-45e7-11e9-b578-494a5b19ab8b.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\3332f410-45e7-11e9-b578-494a5b19ab8b.wav': Format not recognised.
+2025-04-21 22:34:34,897 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\37f732e0-45e7-11e9-b578-494a5b19ab8b.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\37f732e0-45e7-11e9-b578-494a5b19ab8b.wav': Format not recognised.
+2025-04-21 22:34:34,897 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\330926f0-45d1-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\330926f0-45d1-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:34:34,897 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\30f47290-45e3-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\30f47290-45e3-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:34:34,897 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\32f72060-45e3-11e9-81ce-69b74fd7e64e.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\32f72060-45e3-11e9-81ce-69b74fd7e64e.wav': Format not recognised.
+2025-04-21 22:34:34,898 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\32329080-45e6-11e9-b578-494a5b19ab8b.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\32329080-45e6-11e9-b578-494a5b19ab8b.wav': Format not recognised.
+2025-04-21 22:34:34,898 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\3be4a640-45d2-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\3be4a640-45d2-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:34:34,898 - INFO - Error loading audio E:\Speech-Intent-Recognition\data\FSC\fluent_speech_commands_dataset\wavs\speakers\NgXwdx5KkZI5GRWa\4076ffa0-45d2-11e9-9992-dfba019cb646.wav: Error opening 'E:\\Speech-Intent-Recognition\\data\\FSC\\fluent_speech_commands_dataset\\wavs\\speakers\\NgXwdx5KkZI5GRWa\\4076ffa0-45d2-11e9-9992-dfba019cb646.wav': Format not recognised.
+2025-04-21 22:34:36,067 - INFO - Initializing device...
+2025-04-21 22:34:36,067 - INFO - Using device: cuda
+2025-04-21 22:34:36,067 - INFO - Loading train dataset...
+2025-04-21 22:34:36,068 - INFO - Train dataset loaded with 23132 samples
+2025-04-21 22:34:36,068 - INFO - Loading validation dataset...
+2025-04-21 22:34:36,068 - INFO - Validation dataset loaded with 3118 samples
+2025-04-21 22:34:36,068 - INFO - Creating data loaders with num_workers=4...
+2025-04-21 22:34:36,068 - INFO - Initializing model...
+2025-04-21 22:34:36,069 - INFO - Model initialized and moved to device
+2025-04-21 22:34:36,069 - INFO - Initializing loss function and optimizer...
+2025-04-21 22:34:36,069 - INFO - Starting full training...
+2025-04-21 22:34:36,069 - INFO - Epoch 1/10 - Training...
+2025-04-21 22:34:36,070 - INFO - Batch 0/2892
+2025-04-21 22:34:36,070 - INFO - Batch 100/2892
+2025-04-21 22:34:36,070 - INFO - Batch 200/2892
+2025-04-21 22:34:36,070 - INFO - Batch 300/2892
+2025-04-21 22:34:36,070 - INFO - Batch 400/2892
+2025-04-21 22:34:36,070 - INFO - Batch 500/2892
+2025-04-21 22:34:36,070 - INFO - Batch 600/2892
+2025-04-21 22:34:36,071 - INFO - Batch 700/2892
+2025-04-21 22:34:36,071 - INFO - Batch 800/2892
+2025-04-21 22:34:36,071 - INFO - Batch 900/2892
+2025-04-21 22:34:36,071 - INFO - Batch 1000/2892
+2025-04-21 22:34:36,071 - INFO - Batch 1100/2892
+2025-04-21 22:34:36,071 - INFO - Batch 1200/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1300/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1400/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1500/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1600/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1700/2892
+2025-04-21 22:34:36,072 - INFO - Batch 1800/2892
+2025-04-21 22:34:36,073 - INFO - Batch 1900/2892
+2025-04-21 22:34:36,073 - INFO - Batch 2000/2892
+2025-04-21 22:34:36,073 - INFO - Batch 2100/2892
+2025-04-21 22:34:36,073 - INFO - Batch 2200/2892
+2025-04-21 22:34:36,073 - INFO - Batch 2300/2892
+2025-04-21 22:34:36,074 - INFO - Batch 2400/2892
+2025-04-21 22:34:36,074 - INFO - Batch 2500/2892
+2025-04-21 22:34:36,074 - INFO - Batch 2600/2892
+2025-04-21 22:34:36,074 - INFO - Batch 2700/2892
+2025-04-21 22:34:36,074 - INFO - Batch 2800/2892
+2025-04-21 22:34:36,074 - INFO - Epoch 1 | Train Loss: 3.2654 | Train Acc: 0.1007 | Val Loss: 3.1240 | Val Acc: 0.1206
+2025-04-21 22:34:36,837 - ERROR - E:\Speech-Intent-Recognition\venv\Lib\site-packages\torch\optim\lr_scheduler.py:62: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+2025-04-21 22:34:36,838 - ERROR - warnings.warn(
+2025-04-21 22:34:36,838 - ERROR - Traceback (most recent call last):
+2025-04-21 22:34:36,838 - ERROR - File "<frozen runpy>", line 198, in _run_module_as_main
+2025-04-21 22:34:36,838 - ERROR - File "<frozen runpy>", line 88, in _run_code
+2025-04-21 22:34:36,838 - ERROR - File "E:\Speech-Intent-Recognition\scripts\train.py", line 284, in <module>
+2025-04-21 22:34:36,839 - ERROR - train(args, config)
+2025-04-21 22:34:36,839 - ERROR - ~~~~~^^^^^^^^^^^^^^
+2025-04-21 22:34:36,839 - ERROR - File "E:\Speech-Intent-Recognition\scripts\train.py", line 220, in train
+2025-04-21 22:34:36,839 - ERROR - print(f"\u2705 Best model saved with Val Acc: {val_acc:.4f}")
+2025-04-21 22:34:36,839 - ERROR - ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-04-21 22:34:36,839 - ERROR - File "C:\Users\avipa\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+2025-04-21 22:34:36,839 - ERROR - return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+2025-04-21 22:34:36,840 - ERROR - ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-04-21 22:34:36,840 - ERROR - UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+2025-04-21 22:34:36,840 - ERROR - Error in Model Training. Return code: 1
+2025-04-21 22:34:36,840 - ERROR - Training failed. Stopping pipeline.

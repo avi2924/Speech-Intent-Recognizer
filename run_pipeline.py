@@ -34,24 +34,37 @@ def run_command(command, description):
     
     start_time = time.time()
     try:
+        # Use PYTHONIOENCODING to ensure proper handling of UTF-8 characters
+        env = os.environ.copy()
+        env["PYTHONIOENCODING"] = "utf-8"
+        
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,
-            shell=True
+            shell=True,
+            env=env
         )
         
-        # Stream and log output in real-time
-        for line in process.stdout:
-            logger.info(line.strip())
-        
-        # Get any errors
-        errors = process.stderr.read()
-        if errors:
-            logger.error(errors)
-        
-        process.wait()
+        # Stream and log output
+        while process.poll() is None:
+            line = process.stdout.readline()
+            if line:
+                line = line.rstrip()
+                # Don't log lines that just update progress bars (lines that start with \r)
+                if not line.startswith('\r'):
+                    logger.info(line)
+                    
+        # Get any remaining output
+        stdout, stderr = process.communicate()
+        if stdout:
+            for line in stdout.splitlines():
+                if not line.startswith('\r'):
+                    logger.info(line.strip())
+        if stderr:
+            for line in stderr.splitlines():
+                logger.error(line.strip())
         
         if process.returncode != 0:
             logger.error(f"Error in {description}. Return code: {process.returncode}")
@@ -60,7 +73,7 @@ def run_command(command, description):
         duration = time.time() - start_time
         logger.info(f"Completed: {description} in {duration:.2f} seconds")
         return True
-    
+        
     except Exception as e:
         logger.error(f"Exception in {description}: {str(e)}")
         return False

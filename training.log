@@ -1,5 +1,303 @@
-2025-04-15 16:04:25,256 - INFO - Starting training with args: Namespace(csv='data/processed/processed.csv', label_map='data/processed/label_map.json', epochs=10, batch_size=32, lr=0.001, val_split=0.2, checkpoint_dir='checkpoints/')
-2025-04-15 16:04:26,580 - INFO - Using device: cuda
-2025-04-21 20:23:13,879 - INFO - Starting evaluation with args: Namespace(test_csv='data/processed/processed.csv', label_map='data/processed/label_map.json', model_path='checkpoints/best_model.pt', batch_size=32)
-2025-04-21 20:23:14,025 - INFO - Using device: cuda
-2025-04-21 20:23:15,175 - INFO - Model loaded from checkpoints/best_model.pt
+2025-04-21 22:31:52,487 - INFO - Starting training with config: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': 3e-05, 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 22:31:52,509 - INFO - Using device: cuda
+2025-04-21 22:31:52,509 - INFO - Enabling CuDNN benchmarking
+2025-04-21 22:31:52,569 - INFO - Train dataset loaded with 23132 samples
+2025-04-21 22:31:52,586 - INFO - Validation dataset loaded with 3118 samples
+2025-04-21 22:31:52,586 - INFO - Creating data loaders with num_workers=4...
+2025-04-21 22:31:52,586 - INFO - Initializing model...
+2025-04-21 22:31:52,699 - INFO - Model initialized and moved to device
+2025-04-21 22:31:52,699 - INFO - Initializing loss function and optimizer...
+2025-04-21 22:31:54,052 - INFO - Using Adam optimizer with learning rate: 3e-05
+2025-04-21 22:31:54,053 - INFO - Using ReduceLROnPlateau scheduler
+2025-04-21 22:31:54,053 - INFO - Starting full training...
+2025-04-21 22:31:54,054 - INFO - Epoch 1/10 - Training...
+2025-04-21 22:32:08,889 - INFO -   Batch 0/2892
+2025-04-21 22:32:12,695 - INFO -   Batch 100/2892
+2025-04-21 22:32:15,870 - INFO -   Batch 200/2892
+2025-04-21 22:32:20,351 - INFO -   Batch 300/2892
+2025-04-21 22:32:23,010 - INFO -   Batch 400/2892
+2025-04-21 22:32:25,844 - INFO -   Batch 500/2892
+2025-04-21 22:32:30,789 - INFO -   Batch 600/2892
+2025-04-21 22:32:33,981 - INFO -   Batch 700/2892
+2025-04-21 22:32:37,975 - INFO -   Batch 800/2892
+2025-04-21 22:32:41,668 - INFO -   Batch 900/2892
+2025-04-21 22:32:45,649 - INFO -   Batch 1000/2892
+2025-04-21 22:32:49,905 - INFO -   Batch 1100/2892
+2025-04-21 22:32:54,822 - INFO -   Batch 1200/2892
+2025-04-21 22:32:58,459 - INFO -   Batch 1300/2892
+2025-04-21 22:33:01,422 - INFO -   Batch 1400/2892
+2025-04-21 22:33:04,599 - INFO -   Batch 1500/2892
+2025-04-21 22:33:07,906 - INFO -   Batch 1600/2892
+2025-04-21 22:33:10,436 - INFO -   Batch 1700/2892
+2025-04-21 22:33:13,860 - INFO -   Batch 1800/2892
+2025-04-21 22:33:16,880 - INFO -   Batch 1900/2892
+2025-04-21 22:33:21,198 - INFO -   Batch 2000/2892
+2025-04-21 22:33:24,228 - INFO -   Batch 2100/2892
+2025-04-21 22:33:31,161 - INFO -   Batch 2200/2892
+2025-04-21 22:33:34,547 - INFO -   Batch 2300/2892
+2025-04-21 22:33:41,792 - INFO -   Batch 2400/2892
+2025-04-21 22:33:46,364 - INFO -   Batch 2500/2892
+2025-04-21 22:33:49,257 - INFO -   Batch 2600/2892
+2025-04-21 22:33:52,460 - INFO -   Batch 2700/2892
+2025-04-21 22:33:56,544 - INFO -   Batch 2800/2892
+2025-04-21 22:34:35,717 - INFO - Epoch 1/10 | Train Loss: 3.2654 | Train Acc: 0.1007 | Val Loss: 3.1240 | Val Acc: 0.1206
+2025-04-21 22:34:36,054 - INFO - \u2705 Best model saved at epoch 1 with Val Acc: 0.1206
+2025-04-21 22:44:09,005 - INFO - Starting training with config: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': 3e-05, 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 22:44:09,024 - INFO - Using device: cuda
+2025-04-21 22:44:09,074 - INFO - Train dataset loaded with 23132 samples
+2025-04-21 22:44:09,090 - INFO - Validation dataset loaded with 3118 samples
+2025-04-21 22:44:09,090 - INFO - Creating data loaders with num_workers=4...
+2025-04-21 22:44:09,091 - INFO - Initializing model...
+2025-04-21 22:44:09,219 - INFO - Model initialized and moved to device
+2025-04-21 22:44:09,219 - INFO - Initializing loss function and optimizer...
+2025-04-21 22:44:10,703 - INFO - Using Adam optimizer with learning rate: 3e-05
+2025-04-21 22:44:10,704 - INFO - Using ReduceLROnPlateau scheduler
+2025-04-21 22:44:10,704 - INFO - Starting full training...
+2025-04-21 22:44:10,704 - INFO - Epoch 1/10 - Training...
+2025-04-21 22:44:25,409 - INFO - Batch 0/2892 - Loss: 3.4485
+2025-04-21 22:44:30,832 - INFO - Batch 500/2892 - Loss: 3.3574
+2025-04-21 22:44:36,222 - INFO - Batch 1000/2892 - Loss: 3.2846
+2025-04-21 22:44:41,312 - INFO - Batch 1500/2892 - Loss: 3.2775
+2025-04-21 22:44:45,607 - INFO - Batch 2000/2892 - Loss: 3.2239
+2025-04-21 22:44:49,872 - INFO - Batch 2500/2892 - Loss: 3.1493
+2025-04-21 22:44:54,031 - INFO - Epoch 1/10 - Validating...
+2025-04-21 22:45:11,913 - INFO - Epoch 1/10 | Train Loss: 3.2629 | Train Acc: 0.1018 | Val Loss: 3.1246 | Val Acc: 0.1254 | Time: 61.2s
+2025-04-21 22:45:11,948 - INFO - [BEST] Model saved at epoch 1 with Val Acc: 0.1254
+2025-04-21 22:45:11,950 - INFO - Epoch 2/10 - Training...
+2025-04-21 22:45:25,385 - INFO - Batch 0/2892 - Loss: 3.3118
+2025-04-21 22:45:30,973 - INFO - Batch 500/2892 - Loss: 3.0646
+2025-04-21 22:45:35,937 - INFO - Batch 1000/2892 - Loss: 3.0965
+2025-04-21 22:45:40,303 - INFO - Batch 1500/2892 - Loss: 3.0113
+2025-04-21 22:45:44,616 - INFO - Batch 2000/2892 - Loss: 3.0457
+2025-04-21 22:45:48,891 - INFO - Batch 2500/2892 - Loss: 2.9947
+2025-04-21 22:45:53,304 - INFO - Epoch 2/10 - Validating...
+2025-04-21 22:46:09,555 - INFO - Epoch 2/10 | Train Loss: 3.0517 | Train Acc: 0.1269 | Val Loss: 2.9639 | Val Acc: 0.1366 | Time: 57.6s
+2025-04-21 22:46:09,840 - INFO - [BEST] Model saved at epoch 2 with Val Acc: 0.1366
+2025-04-21 22:46:09,842 - INFO - Epoch 3/10 - Training...
+2025-04-21 22:46:22,287 - INFO - Batch 0/2892 - Loss: 3.0253
+2025-04-21 22:46:27,518 - INFO - Batch 500/2892 - Loss: 2.8707
+2025-04-21 22:46:32,207 - INFO - Batch 1000/2892 - Loss: 2.9035
+2025-04-21 22:46:37,131 - INFO - Batch 1500/2892 - Loss: 2.8894
+2025-04-21 22:46:43,088 - INFO - Batch 2000/2892 - Loss: 2.7777
+2025-04-21 22:46:49,326 - INFO - Batch 2500/2892 - Loss: 2.7691
+2025-04-21 22:46:55,689 - INFO - Epoch 3/10 - Validating...
+2025-04-21 22:47:13,539 - INFO - Epoch 3/10 | Train Loss: 2.8413 | Train Acc: 0.1485 | Val Loss: 2.7207 | Val Acc: 0.1687 | Time: 63.7s
+2025-04-21 22:47:13,585 - INFO - [BEST] Model saved at epoch 3 with Val Acc: 0.1687
+2025-04-21 22:47:13,588 - INFO - Epoch 4/10 - Training...
+2025-04-21 22:47:27,033 - INFO - Batch 0/2892 - Loss: 2.5763
+2025-04-21 22:47:32,881 - INFO - Batch 500/2892 - Loss: 2.6783
+2025-04-21 22:47:38,675 - INFO - Batch 1000/2892 - Loss: 2.7261
+2025-04-21 22:47:45,223 - INFO - Batch 1500/2892 - Loss: 2.6672
+2025-04-21 22:47:50,785 - INFO - Batch 2000/2892 - Loss: 2.6031
+2025-04-21 22:47:56,344 - INFO - Batch 2500/2892 - Loss: 2.6025
+2025-04-21 22:48:01,801 - INFO - Epoch 4/10 - Validating...
+2025-04-21 22:48:20,105 - INFO - Epoch 4/10 | Train Loss: 2.6456 | Train Acc: 0.1760 | Val Loss: 2.6271 | Val Acc: 0.1870 | Time: 66.5s
+2025-04-21 22:48:20,165 - INFO - [BEST] Model saved at epoch 4 with Val Acc: 0.1870
+2025-04-21 22:48:20,167 - INFO - Epoch 5/10 - Training...
+2025-04-21 22:48:34,685 - INFO - Batch 0/2892 - Loss: 2.2375
+2025-04-21 22:48:40,141 - INFO - Batch 500/2892 - Loss: 2.5462
+2025-04-21 22:48:44,961 - INFO - Batch 1000/2892 - Loss: 2.5343
+2025-04-21 22:48:49,975 - INFO - Batch 1500/2892 - Loss: 2.5054
+2025-04-21 22:48:54,925 - INFO - Batch 2000/2892 - Loss: 2.5318
+2025-04-21 22:48:59,896 - INFO - Batch 2500/2892 - Loss: 2.5249
+2025-04-21 22:49:04,653 - INFO - Epoch 5/10 - Validating...
+2025-04-21 22:49:20,778 - INFO - Epoch 5/10 | Train Loss: 2.5242 | Train Acc: 0.1917 | Val Loss: 2.6105 | Val Acc: 0.1905 | Time: 60.6s
+2025-04-21 22:49:20,814 - INFO - [BEST] Model saved at epoch 5 with Val Acc: 0.1905
+2025-04-21 22:49:20,816 - INFO - Epoch 6/10 - Training...
+2025-04-21 22:49:33,688 - INFO - Batch 0/2892 - Loss: 3.0809
+2025-04-21 22:49:38,466 - INFO - Batch 500/2892 - Loss: 2.4718
+2025-04-21 22:49:43,096 - INFO - Batch 1000/2892 - Loss: 2.3904
+2025-04-21 22:49:47,607 - INFO - Batch 1500/2892 - Loss: 2.3398
+2025-04-21 22:49:52,141 - INFO - Batch 2000/2892 - Loss: 2.4265
+2025-04-21 22:49:57,463 - INFO - Batch 2500/2892 - Loss: 2.3278
+2025-04-21 22:50:02,385 - INFO - Epoch 6/10 - Validating...
+2025-04-21 22:50:19,895 - INFO - Epoch 6/10 | Train Loss: 2.4181 | Train Acc: 0.2144 | Val Loss: 2.5195 | Val Acc: 0.2133 | Time: 59.1s
+2025-04-21 22:50:19,937 - INFO - [BEST] Model saved at epoch 6 with Val Acc: 0.2133
+2025-04-21 22:50:19,938 - INFO - Epoch 7/10 - Training...
+2025-04-21 22:50:35,738 - INFO - Batch 0/2892 - Loss: 2.6639
+2025-04-21 22:50:41,826 - INFO - Batch 500/2892 - Loss: 2.4014
+2025-04-21 22:50:48,022 - INFO - Batch 1000/2892 - Loss: 2.3680
+2025-04-21 22:50:54,465 - INFO - Batch 1500/2892 - Loss: 2.2675
+2025-04-21 22:51:00,241 - INFO - Batch 2000/2892 - Loss: 2.3271
+2025-04-21 22:51:06,405 - INFO - Batch 2500/2892 - Loss: 2.2879
+2025-04-21 22:51:12,523 - INFO - Epoch 7/10 - Validating...
+2025-04-21 22:51:29,461 - INFO - Epoch 7/10 | Train Loss: 2.3226 | Train Acc: 0.2318 | Val Loss: 2.4220 | Val Acc: 0.2280 | Time: 69.5s
+2025-04-21 22:51:29,504 - INFO - [BEST] Model saved at epoch 7 with Val Acc: 0.2280
+2025-04-21 22:51:29,506 - INFO - Epoch 8/10 - Training...
+2025-04-21 22:51:42,486 - INFO - Batch 0/2892 - Loss: 2.3166
+2025-04-21 22:51:47,298 - INFO - Batch 500/2892 - Loss: 2.2352
+2025-04-21 22:51:51,975 - INFO - Batch 1000/2892 - Loss: 2.2440
+2025-04-21 22:51:56,959 - INFO - Batch 1500/2892 - Loss: 2.2590
+2025-04-21 22:52:01,663 - INFO - Batch 2000/2892 - Loss: 2.2546
+2025-04-21 22:52:06,690 - INFO - Batch 2500/2892 - Loss: 2.1125
+2025-04-21 22:52:12,207 - INFO - Epoch 8/10 - Validating...
+2025-04-21 22:52:29,974 - INFO - Epoch 8/10 | Train Loss: 2.2179 | Train Acc: 0.2579 | Val Loss: 2.4558 | Val Acc: 0.2489 | Time: 60.5s
+2025-04-21 22:52:30,003 - INFO - [BEST] Model saved at epoch 8 with Val Acc: 0.2489
+2025-04-21 22:52:30,005 - INFO - Epoch 9/10 - Training...
+2025-04-21 22:52:44,664 - INFO - Batch 0/2892 - Loss: 2.0273
+2025-04-21 22:52:49,749 - INFO - Batch 500/2892 - Loss: 2.0867
+2025-04-21 22:52:54,675 - INFO - Batch 1000/2892 - Loss: 2.1372
+2025-04-21 22:53:00,976 - INFO - Batch 1500/2892 - Loss: 2.1058
+2025-04-21 22:53:07,449 - INFO - Batch 2000/2892 - Loss: 2.1115
+2025-04-21 22:53:13,600 - INFO - Batch 2500/2892 - Loss: 2.0971
+2025-04-21 22:53:19,399 - INFO - Epoch 9/10 - Validating...
+2025-04-21 22:53:38,447 - INFO - Epoch 9/10 | Train Loss: 2.1104 | Train Acc: 0.2851 | Val Loss: 2.3099 | Val Acc: 0.2617 | Time: 68.4s
+2025-04-21 22:53:38,495 - INFO - [BEST] Model saved at epoch 9 with Val Acc: 0.2617
+2025-04-21 22:53:38,496 - INFO - Epoch 10/10 - Training...
+2025-04-21 22:53:54,740 - INFO - Batch 0/2892 - Loss: 2.1794
+2025-04-21 22:54:00,715 - INFO - Batch 500/2892 - Loss: 2.0606
+2025-04-21 22:54:06,107 - INFO - Batch 1000/2892 - Loss: 2.0525
+2025-04-21 22:54:10,876 - INFO - Batch 1500/2892 - Loss: 1.9971
+2025-04-21 22:54:16,125 - INFO - Batch 2000/2892 - Loss: 2.0569
+2025-04-21 22:54:21,790 - INFO - Batch 2500/2892 - Loss: 1.9442
+2025-04-21 22:54:27,005 - INFO - Epoch 10/10 - Validating...
+2025-04-21 22:54:44,433 - INFO - Epoch 10/10 | Train Loss: 2.0159 | Train Acc: 0.3076 | Val Loss: 2.5524 | Val Acc: 0.2482 | Time: 65.9s
+2025-04-21 22:54:44,460 - INFO - Training completed. Best validation accuracy: 0.2617
+2025-04-21 22:54:44,461 - INFO - Training completed.
+2025-04-21 22:54:48,795 - INFO - Starting evaluation with config: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': '3e-5', 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 22:54:48,815 - INFO - Using device: cuda
+2025-04-21 22:54:48,828 - INFO - Test dataset loaded with 3793 samples
+2025-04-21 22:54:48,828 - INFO - Test DataLoader created
+2025-04-21 22:54:48,979 - INFO - Model loaded from checkpoints//best_model.pt
+2025-04-21 22:54:48,979 - INFO - Model set to evaluation mode
+2025-04-21 22:54:48,979 - INFO - Running evaluation...
+2025-04-21 22:55:02,098 - INFO - Processing batch 0/475
+2025-04-21 22:55:02,708 - INFO - Processing batch 50/475
+2025-04-21 22:55:03,057 - INFO - Processing batch 100/475
+2025-04-21 22:55:06,166 - INFO - Processing batch 150/475
+2025-04-21 22:55:08,361 - INFO - Processing batch 200/475
+2025-04-21 22:55:11,585 - INFO - Processing batch 250/475
+2025-04-21 22:55:14,715 - INFO - Processing batch 300/475
+2025-04-21 22:55:16,908 - INFO - Processing batch 350/475
+2025-04-21 22:55:18,851 - INFO - Processing batch 400/475
+2025-04-21 22:55:21,508 - INFO - Processing batch 450/475
+2025-04-21 23:00:28,311 - INFO - Starting training with config: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': 3e-05, 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 23:00:28,330 - INFO - Using device: cuda
+2025-04-21 23:00:28,376 - INFO - Train dataset loaded with 23132 samples
+2025-04-21 23:00:28,392 - INFO - Validation dataset loaded with 3118 samples
+2025-04-21 23:00:28,393 - INFO - Creating data loaders with num_workers=4...
+2025-04-21 23:00:28,393 - INFO - Initializing model...
+2025-04-21 23:00:28,535 - INFO - Model initialized and moved to device
+2025-04-21 23:00:28,535 - INFO - Initializing loss function and optimizer...
+2025-04-21 23:00:29,859 - INFO - Using Adam optimizer with learning rate: 3e-05
+2025-04-21 23:00:29,860 - INFO - Using ReduceLROnPlateau scheduler
+2025-04-21 23:00:29,860 - INFO - Starting full training...
+2025-04-21 23:00:29,860 - INFO - Epoch 1/10 - Training...
+2025-04-21 23:00:44,300 - INFO - Batch 0/2892 - Loss: 3.4433
+2025-04-21 23:00:48,912 - INFO - Batch 500/2892 - Loss: 3.3532
+2025-04-21 23:00:53,186 - INFO - Batch 1000/2892 - Loss: 3.2888
+2025-04-21 23:00:57,480 - INFO - Batch 1500/2892 - Loss: 3.2754
+2025-04-21 23:01:01,988 - INFO - Batch 2000/2892 - Loss: 3.2693
+2025-04-21 23:01:06,541 - INFO - Batch 2500/2892 - Loss: 3.1610
+2025-04-21 23:01:10,771 - INFO - Epoch 1/10 - Validating...
+2025-04-21 23:01:26,489 - INFO - Epoch 1/10 | Train Loss: 3.2750 | Train Acc: 0.0987 | Val Loss: 3.1293 | Val Acc: 0.1225 | Time: 56.6s
+2025-04-21 23:01:26,545 - INFO - [BEST] Model saved at epoch 1 with Val Acc: 0.1225
+2025-04-21 23:01:26,546 - INFO - Epoch 2/10 - Training...
+2025-04-21 23:01:40,128 - INFO - Batch 0/2892 - Loss: 3.0188
+2025-04-21 23:01:45,297 - INFO - Batch 500/2892 - Loss: 3.0916
+2025-04-21 23:01:51,225 - INFO - Batch 1000/2892 - Loss: 3.0883
+2025-04-21 23:01:56,897 - INFO - Batch 1500/2892 - Loss: 3.0776
+2025-04-21 23:02:02,592 - INFO - Batch 2000/2892 - Loss: 3.0572
+2025-04-21 23:02:08,203 - INFO - Batch 2500/2892 - Loss: 2.9798
+2025-04-21 23:02:13,589 - INFO - Epoch 2/10 - Validating...
+2025-04-21 23:02:30,352 - INFO - Epoch 2/10 | Train Loss: 3.0568 | Train Acc: 0.1272 | Val Loss: 2.9452 | Val Acc: 0.1363 | Time: 63.8s
+2025-04-21 23:02:30,385 - INFO - [BEST] Model saved at epoch 2 with Val Acc: 0.1363
+2025-04-21 23:02:30,387 - INFO - Epoch 3/10 - Training...
+2025-04-21 23:02:42,921 - INFO - Batch 0/2892 - Loss: 3.2418
+2025-04-21 23:02:48,063 - INFO - Batch 500/2892 - Loss: 2.9533
+2025-04-21 23:02:53,004 - INFO - Batch 1000/2892 - Loss: 2.8870
+2025-04-21 23:02:58,059 - INFO - Batch 1500/2892 - Loss: 2.8265
+2025-04-21 23:03:04,000 - INFO - Batch 2000/2892 - Loss: 2.7717
+2025-04-21 23:03:10,411 - INFO - Batch 2500/2892 - Loss: 2.7731
+2025-04-21 23:03:15,133 - INFO - Epoch 3/10 - Validating...
+2025-04-21 23:03:31,220 - INFO - Epoch 3/10 | Train Loss: 2.8381 | Train Acc: 0.1549 | Val Loss: 2.9409 | Val Acc: 0.1312 | Time: 60.8s
+2025-04-21 23:03:31,251 - INFO - Epoch 4/10 - Training...
+2025-04-21 23:03:44,100 - INFO - Batch 0/2892 - Loss: 2.8628
+2025-04-21 23:03:49,184 - INFO - Batch 500/2892 - Loss: 2.6702
+2025-04-21 23:03:58,541 - INFO - Batch 1000/2892 - Loss: 2.6453
+2025-04-21 23:04:10,921 - INFO - Batch 1500/2892 - Loss: 2.5336
+2025-04-21 23:04:22,398 - INFO - Batch 2000/2892 - Loss: 2.5558
+2025-04-21 23:04:27,361 - INFO - Batch 2500/2892 - Loss: 2.5386
+2025-04-21 23:04:31,935 - INFO - Epoch 4/10 - Validating...
+2025-04-21 23:04:48,128 - INFO - Epoch 4/10 | Train Loss: 2.6283 | Train Acc: 0.1792 | Val Loss: 2.7194 | Val Acc: 0.1636 | Time: 76.9s
+2025-04-21 23:04:48,170 - INFO - [BEST] Model saved at epoch 4 with Val Acc: 0.1636
+2025-04-21 23:04:48,173 - INFO - Epoch 5/10 - Training...
+2025-04-21 23:05:01,793 - INFO - Batch 0/2892 - Loss: 2.8372
+2025-04-21 23:05:06,599 - INFO - Batch 500/2892 - Loss: 2.5151
+2025-04-21 23:05:12,347 - INFO - Batch 1000/2892 - Loss: 2.5557
+2025-04-21 23:05:17,760 - INFO - Batch 1500/2892 - Loss: 2.4661
+2025-04-21 23:05:23,242 - INFO - Batch 2000/2892 - Loss: 2.4416
+2025-04-21 23:05:28,444 - INFO - Batch 2500/2892 - Loss: 2.4871
+2025-04-21 23:05:34,992 - INFO - Epoch 5/10 - Validating...
+2025-04-21 23:05:52,510 - INFO - Epoch 5/10 | Train Loss: 2.4911 | Train Acc: 0.1972 | Val Loss: 2.5504 | Val Acc: 0.2033 | Time: 64.3s
+2025-04-21 23:05:52,539 - INFO - [BEST] Model saved at epoch 5 with Val Acc: 0.2033
+2025-04-21 23:05:52,540 - INFO - Epoch 6/10 - Training...
+2025-04-21 23:06:05,151 - INFO - Batch 0/2892 - Loss: 2.1950
+2025-04-21 23:06:10,172 - INFO - Batch 500/2892 - Loss: 2.4036
+2025-04-21 23:06:16,034 - INFO - Batch 1000/2892 - Loss: 2.3707
+2025-04-21 23:06:23,259 - INFO - Batch 1500/2892 - Loss: 2.3959
+2025-04-21 23:06:28,555 - INFO - Batch 2000/2892 - Loss: 2.3955
+2025-04-21 23:06:33,889 - INFO - Batch 2500/2892 - Loss: 2.3381
+2025-04-21 23:06:38,132 - INFO - Epoch 6/10 - Validating...
+2025-04-21 23:06:55,117 - INFO - Epoch 6/10 | Train Loss: 2.3755 | Train Acc: 0.2221 | Val Loss: 2.4816 | Val Acc: 0.2242 | Time: 62.6s
+2025-04-21 23:06:55,146 - INFO - [BEST] Model saved at epoch 6 with Val Acc: 0.2242
+2025-04-21 23:06:55,148 - INFO - Epoch 7/10 - Training...
+2025-04-21 23:07:07,557 - INFO - Batch 0/2892 - Loss: 2.3607
+2025-04-21 23:07:12,123 - INFO - Batch 500/2892 - Loss: 2.2967
+2025-04-21 23:07:16,528 - INFO - Batch 1000/2892 - Loss: 2.2912
+2025-04-21 23:07:20,879 - INFO - Batch 1500/2892 - Loss: 2.2689
+2025-04-21 23:07:25,520 - INFO - Batch 2000/2892 - Loss: 2.2348
+2025-04-21 23:07:29,932 - INFO - Batch 2500/2892 - Loss: 2.1618
+2025-04-21 23:07:34,205 - INFO - Epoch 7/10 - Validating...
+2025-04-21 23:07:49,979 - INFO - Epoch 7/10 | Train Loss: 2.2599 | Train Acc: 0.2482 | Val Loss: 2.6270 | Val Acc: 0.2056 | Time: 54.8s
+2025-04-21 23:07:50,003 - INFO - Epoch 8/10 - Training...
+2025-04-21 23:08:02,438 - INFO - Batch 0/2892 - Loss: 2.2743
+2025-04-21 23:08:06,965 - INFO - Batch 500/2892 - Loss: 2.1238
+2025-04-21 23:08:11,333 - INFO - Batch 1000/2892 - Loss: 2.1823
+2025-04-21 23:08:15,702 - INFO - Batch 1500/2892 - Loss: 2.0905
+2025-04-21 23:08:20,071 - INFO - Batch 2000/2892 - Loss: 2.1339
+2025-04-21 23:08:24,470 - INFO - Batch 2500/2892 - Loss: 2.1110
+2025-04-21 23:08:28,719 - INFO - Epoch 8/10 - Validating...
+2025-04-21 23:08:44,582 - INFO - Epoch 8/10 | Train Loss: 2.1407 | Train Acc: 0.2712 | Val Loss: 2.7924 | Val Acc: 0.1857 | Time: 54.6s
+2025-04-21 23:08:44,607 - INFO - Epoch 9/10 - Training...
+2025-04-21 23:08:58,238 - INFO - Batch 0/2892 - Loss: 2.1195
+2025-04-21 23:09:03,011 - INFO - Batch 500/2892 - Loss: 2.0547
+2025-04-21 23:09:07,831 - INFO - Batch 1000/2892 - Loss: 2.0501
+2025-04-21 23:09:12,520 - INFO - Batch 1500/2892 - Loss: 2.0560
+2025-04-21 23:09:17,130 - INFO - Batch 2000/2892 - Loss: 2.0423
+2025-04-21 23:09:22,539 - INFO - Batch 2500/2892 - Loss: 1.9677
+2025-04-21 23:09:28,590 - INFO - Epoch 9/10 - Validating...
+2025-04-21 23:09:46,617 - INFO - Epoch 9/10 | Train Loss: 2.0268 | Train Acc: 0.2995 | Val Loss: 2.5655 | Val Acc: 0.2264 | Time: 62.0s
+2025-04-21 23:09:46,675 - INFO - [BEST] Model saved at epoch 9 with Val Acc: 0.2264
+2025-04-21 23:09:46,678 - INFO - Epoch 10/10 - Training...
+2025-04-21 23:10:02,120 - INFO - Batch 0/2892 - Loss: 2.3654
+2025-04-21 23:10:07,008 - INFO - Batch 500/2892 - Loss: 1.8836
+2025-04-21 23:10:11,530 - INFO - Batch 1000/2892 - Loss: 1.9563
+2025-04-21 23:10:16,039 - INFO - Batch 1500/2892 - Loss: 1.9182
+2025-04-21 23:10:20,527 - INFO - Batch 2000/2892 - Loss: 1.8931
+2025-04-21 23:10:25,345 - INFO - Batch 2500/2892 - Loss: 1.9311
+2025-04-21 23:10:31,195 - INFO - Epoch 10/10 - Validating...
+2025-04-21 23:10:47,184 - INFO - Epoch 10/10 | Train Loss: 1.9165 | Train Acc: 0.3266 | Val Loss: 2.3293 | Val Acc: 0.2771 | Time: 60.5s
+2025-04-21 23:10:47,216 - INFO - [BEST] Model saved at epoch 10 with Val Acc: 0.2771
+2025-04-21 23:10:47,216 - INFO - Training completed. Best validation accuracy: 0.2771
+2025-04-21 23:10:47,218 - INFO - Training completed.
+2025-04-21 23:10:51,178 - INFO - Starting evaluation with config: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': '3e-5', 'val_split': 0.1, 'early_stop_patience': 5, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 23:10:51,198 - INFO - Using device: cuda
+2025-04-21 23:10:51,220 - INFO - Test dataset loaded with 3793 samples
+2025-04-21 23:10:51,220 - INFO - Test DataLoader created
+2025-04-21 23:10:51,348 - INFO - Model loaded from checkpoints//best_model.pt
+2025-04-21 23:10:51,348 - INFO - Model set to evaluation mode
+2025-04-21 23:10:51,349 - INFO - Running evaluation...
+2025-04-21 23:11:04,099 - INFO - Processing batch 0/475
+2025-04-21 23:11:04,713 - INFO - Processing batch 50/475
+2025-04-21 23:11:05,076 - INFO - Processing batch 100/475
+2025-04-21 23:11:05,405 - INFO - Processing batch 150/475
+2025-04-21 23:11:05,719 - INFO - Processing batch 200/475
+2025-04-21 23:11:06,062 - INFO - Processing batch 250/475
+2025-04-21 23:11:06,405 - INFO - Processing batch 300/475
+2025-04-21 23:11:06,732 - INFO - Processing batch 350/475
+2025-04-21 23:11:07,067 - INFO - Processing batch 400/475
+2025-04-21 23:11:07,440 - INFO - Processing batch 450/475
+2025-04-21 23:11:08,807 - INFO - Evaluation completed in 17.46s. Test accuracy: 0.3129
+2025-04-21 23:11:08,807 - INFO - Detailed results saved to checkpoints/evaluation_results
+2025-04-21 23:11:08,807 - INFO - Evaluation completed.

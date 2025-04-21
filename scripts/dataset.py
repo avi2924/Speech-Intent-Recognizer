@@ -32,33 +32,40 @@ class FSCIntentDataset(Dataset):
     def __getitem__(self, idx):
         """
         Fetches the sample at the given index.
-        Args:
-            idx (int): Index of the sample to fetch.
-        Returns:
-            mel_spec (torch.Tensor): Mel spectrogram of the audio file.
-            label (int): Label corresponding to the intent.
         """
-        # Get relative audio path and label
-        rel_audio_path = self.data.iloc[idx]['audio_path']
-        label = self.data.iloc[idx]['label']
-        
-        # Convert to absolute path
-        audio_path = os.path.normpath(os.path.join(self.root_dir, rel_audio_path))
-        
         try:
+            # Get relative audio path and label
+            rel_audio_path = self.data.iloc[idx]['audio_path']
+            label = self.data.iloc[idx]['label']
+            
+            # Convert to absolute path
+            audio_path = os.path.normpath(os.path.join(self.root_dir, rel_audio_path))
+            
             # Check if file exists
             if not os.path.exists(audio_path):
                 print(f"Audio file not found: {audio_path}")
-                # Return a placeholder tensor if file not found
                 return torch.zeros((64, 100)), label
 
-            # Load the audio file
-            waveform, sample_rate = torchaudio.load(audio_path)
+            # Try to load the audio file
+            try:
+                waveform, sample_rate = torchaudio.load(audio_path)
+            except Exception as audio_error:
+                print(f"Error loading audio {audio_path}: {audio_error}")
+                return torch.zeros((64, 100)), label
+
+            # Handle mono/stereo conversion if needed
+            if waveform.size(0) > 1:
+                waveform = torch.mean(waveform, dim=0, keepdim=True)
             
             # Resample to 16kHz if needed
             if sample_rate != 16000:
                 resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
                 waveform = resampler(waveform)
+                
+            # Handle empty or corrupted audio
+            if waveform.size(1) == 0:
+                print(f"Empty audio file: {audio_path}")
+                return torch.zeros((64, 100)), label
 
             # Convert waveform to Mel Spectrogram
             mel_spec_transform = torchaudio.transforms.MelSpectrogram(
@@ -74,7 +81,7 @@ class FSCIntentDataset(Dataset):
             return mel_spec, label
         
         except Exception as e:
-            print(f"Error loading audio file {audio_path}: {str(e)}")
+            print(f"Error processing sample {idx}: {e}")
             # Return a placeholder tensor in case of error
             return torch.zeros((64, 100)), label
 

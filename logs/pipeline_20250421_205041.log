@@ -1,0 +1,16 @@
+2025-04-21 20:50:41,190 - INFO - Starting Speech Intent Recognition Pipeline
+2025-04-21 20:50:41,191 - INFO - Arguments: Namespace(train_csv='data/FSC/fluent_speech_commands_dataset/data/train_data.csv', valid_csv='data/FSC/fluent_speech_commands_dataset/data/valid_data.csv', test_csv='data/FSC/fluent_speech_commands_dataset/data/test_data.csv', output_dir='data/processed', config_path='configs/config.yaml')
+2025-04-21 20:50:41,191 - INFO - Configuration: {'dataset_path': 'data/processed/processed.csv', 'num_labels': 31, 'epochs': 10, 'batch_size': 8, 'lr': '3e-5', 'val_split': 0.1, 'early_stop_patience': 3, 'model_name': 'facebook/wav2vec2-base-960h', 'save_path': 'checkpoints/', 'use_augmentation': True, 'sample_rate': 16000, 'n_mels': 64, 'mel_spec_length': 200, 'num_workers': 4, 'seed': 42}
+2025-04-21 20:50:41,219 - INFO - === STEP 1: PREPROCESSING DATA ===
+2025-04-21 20:50:41,219 - INFO - Starting: Data Preprocessing
+2025-04-21 20:50:41,219 - INFO - Command: python -m scripts.preprocess_fsc --train_csv data/FSC/fluent_speech_commands_dataset/data/train_data.csv --valid_csv data/FSC/fluent_speech_commands_dataset/data/valid_data.csv --test_csv data/FSC/fluent_speech_commands_dataset/data/test_data.csv --output_dir data/processed --label_map_path data/processed/label_map.json
+2025-04-21 20:50:43,369 - INFO - Preprocessing complete.
+2025-04-21 20:50:43,370 - INFO - Train CSV saved to data/processed\train_data.csv
+2025-04-21 20:50:43,370 - INFO - Validation CSV saved to data/processed\valid_data.csv
+2025-04-21 20:50:43,370 - INFO - Test CSV saved to data/processed\test_data.csv
+2025-04-21 20:50:43,370 - INFO - Label map saved to data/processed/label_map.json
+2025-04-21 20:50:43,448 - INFO - Completed: Data Preprocessing in 2.23 seconds
+2025-04-21 20:50:43,448 - INFO - === STEP 2: TRAINING MODEL ===
+2025-04-21 20:50:43,448 - INFO - Starting: Model Training
+2025-04-21 20:50:43,449 - INFO - Command: python -m scripts.train --config configs/config.yaml --train_csv data/processed/train_data.csv --val_csv data/processed/valid_data.csv --label_map data/processed/label_map.json
+2025-04-21 20:50:52,136 - INFO - Using device: cuda

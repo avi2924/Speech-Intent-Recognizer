@@ -1,0 +1,19 @@
+# Minimal configuration for debugging
+
+# Dataset configuration
+dataset_path: "data/processed/processed.csv"
+num_labels: 31
+
+# Reduced parameters for debugging
+epochs: 1
+batch_size: 2
+lr: 0.001
+val_split: 0.1
+early_stop_patience: 3
+
+# Model configuration
+save_path: "checkpoints/"
+
+# System settings
+num_workers: 0
+seed: 42
