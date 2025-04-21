@@ -1,0 +1,2 @@
+2025-04-15 16:04:25,256 - INFO - Starting training with args: Namespace(csv='data/processed/processed.csv', label_map='data/processed/label_map.json', epochs=10, batch_size=32, lr=0.001, val_split=0.2, checkpoint_dir='checkpoints/')
+2025-04-15 16:04:26,580 - INFO - Using device: cuda
