@@ -1,10 +1,26 @@
+# Dataset configuration
 dataset_path: "data/processed/processed.csv"
 num_labels: 31
+
+# Training parameters
 epochs: 10
 batch_size: 8
 lr: 3e-5
-model_name: "facebook/wav2vec2-base-960h"
-save_path: "checkpoints/"
 val_split: 0.1
 early_stop_patience: 3
+
+# Model configuration
+model_name: "facebook/wav2vec2-base-960h"
+save_path: "checkpoints/"
+
+# Data augmentation
 use_augmentation: true
+
+# Audio processing
+sample_rate: 16000
+n_mels: 64
+mel_spec_length: 200
+
+# System settings
+num_workers: 4
+seed: 42

@@ -3,6 +3,7 @@ import logging
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import yaml
 from torch.utils.data import DataLoader, Subset
 from scripts.dataset import FSCIntentDataset
 from models.models import CNNAudioGRU
@@ -13,7 +14,6 @@ import argparse
 import json
 import numpy as np
 
-
 # Set up logging
 log_file = "training.log"
 logging.basicConfig(
@@ -23,7 +23,6 @@ logging.basicConfig(
     filemode="a"  # Append to the log file
 )
 logger = logging.getLogger()
-
 
 def collate_fn(batch):
     """
@@ -49,44 +48,62 @@ def collate_fn(batch):
 
     return mel_specs, labels
 
+def load_config(config_path):
+    """Load configuration from YAML file"""
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
+    return config
 
-def train(args):
+def train(args, config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     logger.info(f"Using device: {device}")
 
-    # Load full dataset
-    full_dataset = FSCIntentDataset(
-        csv_path=args.csv,
+    # Load train dataset
+    train_dataset = FSCIntentDataset(
+        csv_path=args.train_csv,
         label_map_path=args.label_map
     )
 
-    # Train/Validation split using indices
-    indices = list(range(len(full_dataset)))
-    train_indices, val_indices = train_test_split(indices, test_size=args.val_split, random_state=42, shuffle=True)
+    # Load validation dataset
+    val_dataset = FSCIntentDataset(
+        csv_path=args.val_csv,
+        label_map_path=args.label_map
+    )
 
-    train_dataset = Subset(full_dataset, train_indices)
-    val_dataset = Subset(full_dataset, val_indices)
-
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=4, collate_fn=collate_fn)
-    val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=4, collate_fn=collate_fn)
+    train_loader = DataLoader(
+        train_dataset, 
+        batch_size=config['batch_size'], 
+        shuffle=True, 
+        num_workers=4, 
+        collate_fn=collate_fn
+    )
+    
+    val_loader = DataLoader(
+        val_dataset, 
+        batch_size=config['batch_size'], 
+        shuffle=False, 
+        num_workers=4, 
+        collate_fn=collate_fn
+    )
 
     # Load model
-    model = CNNAudioGRU(num_classes=len(full_dataset.label_map)).to(device)
+    model = CNNAudioGRU(num_classes=config['num_labels']).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = optim.Adam(model.parameters(), lr=config['lr'])
 
     best_val_acc = 0
-    os.makedirs(args.checkpoint_dir, exist_ok=True)
+    early_stop_counter = 0
+    os.makedirs(config['save_path'], exist_ok=True)
 
-    for epoch in range(args.epochs):
+    for epoch in range(config['epochs']):
         model.train()
         train_losses = []
         all_preds, all_labels = [], []
 
-        for mel, label in tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.epochs} - Training"):
+        for mel, label in tqdm(train_loader, desc=f"Epoch {epoch+1}/{config['epochs']} - Training"):
             mel, label = mel.to(device), label.to(device)
             optimizer.zero_grad()
             output = model(mel)
@@ -102,14 +119,23 @@ def train(args):
         val_acc = evaluate(model, val_loader, device)
 
         # Log training and validation metrics
-        logger.info(f"Epoch {epoch+1}/{args.epochs} | Train Loss: {sum(train_losses)/len(train_losses):.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
+        logger.info(f"Epoch {epoch+1}/{config['epochs']} | Train Loss: {sum(train_losses)/len(train_losses):.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
         print(f"Epoch {epoch+1} | Train Loss: {sum(train_losses)/len(train_losses):.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), os.path.join(args.checkpoint_dir, "best_model.pt"))
+            torch.save(model.state_dict(), os.path.join(config['save_path'], "best_model.pt"))
             logger.info(f"✅ Best model saved at epoch {epoch+1} with Val Acc: {val_acc:.4f}")
             print("✅ Best model saved!")
+            early_stop_counter = 0
+        else:
+            early_stop_counter += 1
+            
+        # Early stopping
+        if early_stop_counter >= config['early_stop_patience']:
+            logger.info(f"Early stopping at epoch {epoch+1}")
+            print(f"Early stopping at epoch {epoch+1}")
+            break
 
 
 def evaluate(model, loader, device):
@@ -127,16 +153,20 @@ def evaluate(model, loader, device):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--csv', type=str, default='data/processed/processed.csv')
-    parser.add_argument('--label_map', type=str, default='data/processed/label_map.json')
-    parser.add_argument('--epochs', type=int, default=20)
-    parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--lr', type=float, default=1e-3)
-    parser.add_argument('--val_split', type=float, default=0.2, help="Proportion of validation data")
-    parser.add_argument('--checkpoint_dir', type=str, default='checkpoints/')
+    parser.add_argument('--config', type=str, default='configs/config.yaml',
+                       help='Path to configuration YAML file')
+    parser.add_argument('--train_csv', type=str, default='data/processed/train_data.csv',
+                       help='Path to training CSV file')
+    parser.add_argument('--val_csv', type=str, default='data/processed/valid_data.csv',
+                       help='Path to validation CSV file')
+    parser.add_argument('--label_map', type=str, default='data/processed/label_map.json',
+                       help='Path to label map JSON file')
     args = parser.parse_args()
-
+    
+    # Load configuration from YAML file
+    config = load_config(args.config)
+    
     # Log the start of training
-    logger.info(f"Starting training with args: {args}")
-    train(args)
+    logger.info(f"Starting training with config: {config}")
+    train(args, config)
     logger.info("Training completed.")

@@ -4,9 +4,15 @@ import torch
 import argparse
 import logging
 import numpy as np
+import yaml
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+import sys
+import os
+# Add the project root to the path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from scripts.dataset import FSCIntentDataset
 from models.models import CNNAudioGRU
@@ -22,8 +28,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger()
 
+def load_config(config_path):
+    """Load configuration from YAML file"""
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
+    return config
 
-def evaluate_model(args):
+def evaluate_model(args, config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     logger.info(f"Using device: {device}")
@@ -43,14 +54,14 @@ def evaluate_model(args):
     
     test_loader = DataLoader(
         test_dataset,
-        batch_size=args.batch_size,
+        batch_size=config['batch_size'],
         shuffle=False,
-        num_workers=4,
+        num_workers=2,  # Reduced for stability
         collate_fn=collate_fn
     )
 
     # Load the model
-    model = CNNAudioGRU(num_classes=len(label_map)).to(device)
+    model = CNNAudioGRU(num_classes=config['num_labels']).to(device)
     
     # Load the trained model weights
     try:
@@ -67,14 +78,27 @@ def evaluate_model(args):
     all_preds = []
     all_labels = []
     
+    # Add error handling to the evaluation loop
     with torch.no_grad():
-        for mel, label in tqdm(test_loader, desc="Evaluating"):
-            mel, label = mel.to(device), label.to(device)
-            outputs = model(mel)
-            _, preds = torch.max(outputs, 1)
-            
-            all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(label.cpu().numpy())
+        for batch_idx, batch in enumerate(tqdm(test_loader, desc="Evaluating")):
+            try:
+                mel, label = batch
+                mel, label = mel.to(device), label.to(device)
+                outputs = model(mel)
+                _, preds = torch.max(outputs, 1)
+                
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(label.cpu().numpy())
+            except Exception as e:
+                print(f"Error processing batch {batch_idx}: {str(e)}")
+                logger.error(f"Error processing batch {batch_idx}: {str(e)}")
+                continue  # Skip this batch and continue
+    
+    # Check if we successfully processed any samples
+    if len(all_preds) == 0:
+        print("No samples were successfully processed. Cannot calculate metrics.")
+        logger.error("No samples were successfully processed. Cannot calculate metrics.")
+        return
     
     # Calculate metrics
     accuracy = accuracy_score(all_labels, all_preds)
@@ -119,14 +143,18 @@ def evaluate_model(args):
     misclassified = []
     for i, (true, pred) in enumerate(zip(all_labels, all_preds)):
         if true != pred:
-            audio_path = test_dataset.data.iloc[i]['audio_path']
-            misclassified.append({
-                "audio_path": audio_path,
-                "true_label": int(true),
-                "true_intent": inv_label_map[int(true)],
-                "pred_label": int(pred),
-                "pred_intent": inv_label_map[int(pred)]
-            })
+            try:
+                audio_path = test_dataset.data.iloc[i]['audio_path']
+                misclassified.append({
+                    "audio_path": audio_path,
+                    "true_label": int(true),
+                    "true_intent": inv_label_map[int(true)],
+                    "pred_label": int(pred),
+                    "pred_intent": inv_label_map[int(pred)]
+                })
+            except Exception as e:
+                print(f"Error processing misclassified example {i}: {str(e)}")
+                continue
     
     with open(os.path.join(save_dir, "misclassified.json"), "w") as f:
         json.dump(misclassified, f, indent=2)
@@ -149,24 +177,31 @@ def evaluate_model(args):
         plt.tight_layout()
         plt.savefig(os.path.join(save_dir, "confusion_matrix.png"))
         print("Confusion matrix visualization saved.")
-    except:
-        print("Could not generate confusion matrix visualization. Make sure matplotlib and seaborn are installed.")
+    except Exception as e:
+        print(f"Could not generate confusion matrix visualization: {str(e)}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate a trained intent recognition model")
-    parser.add_argument("--test_csv", type=str, default="data/processed/processed.csv",
+    parser.add_argument("--config", type=str, default="configs/config.yaml",
+                       help="Path to configuration YAML file")
+    parser.add_argument("--test_csv", type=str, default="data/processed/test_data.csv",
                        help="Path to the test CSV file")
     parser.add_argument("--label_map", type=str, default="data/processed/label_map.json",
                        help="Path to the label map JSON file")
-    parser.add_argument("--model_path", type=str, default="checkpoints/best_model.pt",
-                       help="Path to the saved model")
-    parser.add_argument("--batch_size", type=int, default=32,
-                       help="Batch size for evaluation")
+    parser.add_argument("--model_path", type=str, default=None,
+                       help="Path to the saved model (defaults to save_path/best_model.pt from config)")
     
     args = parser.parse_args()
     
+    # Load configuration from YAML file
+    config = load_config(args.config)
+    
+    # Set default model path if not provided
+    if args.model_path is None:
+        args.model_path = os.path.join(config['save_path'], "best_model.pt")
+    
     # Log the start of evaluation
-    logger.info(f"Starting evaluation with args: {args}")
-    evaluate_model(args)
+    logger.info(f"Starting evaluation with config: {config}")
+    evaluate_model(args, config)
     logger.info("Evaluation completed.")
