@@ -1,95 +1,93 @@
 import os
 import torch
-import torchaudio
-import pandas as pd
-from torch.utils.data import Dataset
 import json
+import pandas as pd
+import numpy as np
+import librosa
+import logging
+from torch.utils.data import Dataset
+
+# Configure logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 class FSCIntentDataset(Dataset):
     """
     Custom PyTorch Dataset for loading Fluent Speech Commands (FSC) data.
     """
-    def __init__(self, csv_path, label_map_path, transform=None):
+    def __init__(self, csv_path, label_map_path, is_training=True):
         """
         Args:
-            csv_path (str): Path to the CSV file containing audio paths and labels.
-            label_map_path (str): Path to the JSON file containing the label map.
-            transform (callable, optional): Optional transform to apply to the data.
+            csv_path (str): Path to the preprocessed CSV file
+            label_map_path (str): Path to the label map JSON file
+            is_training (bool): Flag indicating if the dataset is for training
         """
         self.data = pd.read_csv(csv_path)
+        self.is_training = is_training
+        
         with open(label_map_path, 'r') as f:
             self.label_map = json.load(f)
-        self.transform = transform
-        # Set the root directory for audio files
-        self.root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
+            
+        logger.info(f"Loaded dataset with {len(self.data)} samples")
+        logger.info(f"Number of classes: {len(self.label_map)}")
+        
     def __len__(self):
         """
         Returns the total number of samples in the dataset.
         """
         return len(self.data)
-
+    
+    def extract_features(self, audio_path):
+        """
+        Extracts Mel Spectrogram features from the given audio file.
+        """
+        try:
+            y, sr = librosa.load(audio_path, sr=16000)
+            
+            # Extract mel spectrogram
+            mel_spec = librosa.feature.melspectrogram(
+                y=y, 
+                sr=sr, 
+                n_fft=1024, 
+                hop_length=512, 
+                n_mels=64
+            )
+            
+            # Convert to log scale
+            mel_spec = librosa.power_to_db(mel_spec, ref=np.max)
+            
+            # Normalize
+            mel_spec = (mel_spec - mel_spec.mean()) / (mel_spec.std() + 1e-8)
+            
+            return torch.FloatTensor(mel_spec)
+            
+        except Exception as e:
+            logger.error(f"Error processing audio file {audio_path}: {e}")
+            return None
+    
     def __getitem__(self, idx):
         """
         Fetches the sample at the given index.
         """
-        try:
-            # Get relative audio path and label
-            rel_audio_path = self.data.iloc[idx]['audio_path']
-            label = self.data.iloc[idx]['label']
-            
-            # Convert to absolute path
-            audio_path = os.path.normpath(os.path.join(self.root_dir, rel_audio_path))
-            
-            # Check if file exists
-            if not os.path.exists(audio_path):
-                print(f"Audio file not found: {audio_path}")
-                return torch.zeros((64, 100)), label
-
-            # Try to load the audio file
-            try:
-                waveform, sample_rate = torchaudio.load(audio_path)
-            except Exception as audio_error:
-                print(f"Error loading audio {audio_path}: {audio_error}")
-                return torch.zeros((64, 100)), label
-
-            # Handle mono/stereo conversion if needed
-            if waveform.size(0) > 1:
-                waveform = torch.mean(waveform, dim=0, keepdim=True)
-            
-            # Resample to 16kHz if needed
-            if sample_rate != 16000:
-                resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
-                waveform = resampler(waveform)
-                
-            # Handle empty or corrupted audio
-            if waveform.size(1) == 0:
-                print(f"Empty audio file: {audio_path}")
-                return torch.zeros((64, 100)), label
-
-            # Convert waveform to Mel Spectrogram
-            mel_spec_transform = torchaudio.transforms.MelSpectrogram(
-                sample_rate=16000,
-                n_mels=64
-            )
-            mel_spec = mel_spec_transform(waveform).squeeze(0)  # [n_mels, time]
-
-            # Apply any additional transformations
-            if self.transform:
-                mel_spec = self.transform(mel_spec)
-
-            return mel_spec, label
+        row = self.data.iloc[idx]
+        audio_path = row['path']
+        label = self.label_map[row['label']]
         
-        except Exception as e:
-            print(f"Error processing sample {idx}: {e}")
-            # Return a placeholder tensor in case of error
-            return torch.zeros((64, 100)), label
+        # Extract features
+        mel_spec = self.extract_features(audio_path)
+        
+        # Handle extraction failures
+        if mel_spec is None:
+            logger.warning(f"Failed to extract features from {audio_path}, using zeros")
+            mel_spec = torch.zeros((64, 100))
+            
+        return mel_spec, label
 
 
 if __name__ == '__main__':
     # Example usage of the FSCIntentDataset
     dataset = FSCIntentDataset(
-        csv_path='data/processed/train_data.csv',  # Updated to use train_data.csv
+        csv_path='data/processed/train_data.csv',
         label_map_path='data/processed/label_map.json'
     )
     print(f"Dataset size: {len(dataset)}")

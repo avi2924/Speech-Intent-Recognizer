@@ -1,61 +1,71 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class CNNAudioGRU(nn.Module):
-    def __init__(self, input_dim=64, num_classes=31, hidden_size=128, num_layers=2, dropout=0.3):
+    def __init__(self, num_classes, input_channels=1):
         super(CNNAudioGRU, self).__init__()
-
-        # CNN for feature extraction
-        self.cnn = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-
-            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-        )
-
-        # Compute the GRU input size after CNN layers
-        self.flattened_cnn_dim = (input_dim // 4) * (32)  # 2 pool layers reduce dim by 4
-
-        # RNN for temporal modeling
-        self.rnn = nn.GRU(
-            input_size=self.flattened_cnn_dim,
-            hidden_size=hidden_size,
-            num_layers=num_layers,
+        
+        # CNN layers
+        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(0.3)
+        
+        # GRU layer
+        self.gru = nn.GRU(
+            input_size=128,
+            hidden_size=128,
+            num_layers=2,
             batch_first=True,
             bidirectional=True,
-            dropout=dropout if num_layers > 1 else 0
+            dropout=0.3
         )
-
-        # Classifier
-        self.classifier = nn.Sequential(
-            nn.Linear(hidden_size * 2, 128),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(128, num_classes)
-        )
-
+        
+        # Attention mechanism
+        self.attention = nn.Linear(256, 1)
+        
+        # Output layer
+        self.fc = nn.Linear(256, num_classes)
+        
     def forward(self, x):
-        # x shape: [B, mel_bins, time]
-        x = x.unsqueeze(1)  # Add channel dim: [B, 1, mel_bins, time]
-        x = self.cnn(x)     # Output: [B, C, mel_bins', time']
-
+        # Add channel dimension if needed
+        if len(x.shape) == 3:
+            x = x.unsqueeze(1)
+            
+        # Apply convolutions with BatchNorm and ReLU
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.bn2(self.conv2(x)))
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.bn3(self.conv3(x)))
+        x = F.max_pool2d(x, 2)
+        
+        # Reshape for GRU
         b, c, h, w = x.size()
-        x = x.permute(0, 3, 1, 2).contiguous()  # [B, time, C, mel]
-        x = x.view(b, w, -1)  # [B, time, features]
-
-        out, _ = self.rnn(x)  # [B, time, hidden*2]
-        out = out[:, -1, :]   # Take last time step
-
-        out = self.classifier(out)
-        return out
+        x = x.permute(0, 3, 1, 2).contiguous().view(b, w, c*h)
+        
+        # Apply dropout
+        x = self.dropout(x)
+        
+        # Apply GRU
+        x, _ = self.gru(x)
+        
+        # Apply attention
+        attn_weights = F.softmax(self.attention(x), dim=1)
+        x = torch.sum(x * attn_weights, dim=1)
+        
+        # Final classification
+        x = self.fc(x)
+        return x
 
 if __name__ == '__main__':
-    model = CNNAudioGRU()
+    model = CNNAudioGRU(num_classes=31)
     dummy_input = torch.randn(4, 64, 200)  # [batch, mel, time]
     output = model(dummy_input)
     print("Output shape:", output.shape)  # [4, num_classes]

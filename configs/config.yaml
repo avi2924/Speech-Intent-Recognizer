@@ -5,7 +5,7 @@ num_labels: 31
 # Training parameters
 epochs: 10
 batch_size: 8 # Adjust based on your GPU memory
-lr: 3e-5
+lr: 3e-4
 val_split: 0.1
 early_stop_patience: 5
 
