@@ -35,25 +35,55 @@ def process_dataset(csv_path, base_path):
         logger.error(f"CSV file not found: {csv_path}")
         return None
         
-    df = pd.read_csv(csv_path)
-    
-    # Ensure all required columns exist
-    required_columns = ['path', 'action', 'object', 'location']
-    if not all(col in df.columns for col in required_columns):
-        logger.error(f"CSV file {csv_path} missing required columns")
+    try:
+        df = pd.read_csv(csv_path)
+    except Exception as e:
+        logger.error(f"Error reading CSV file {csv_path}: {e}")
         return None
     
-    # Normalize paths and create label
+    # Check if CSV has the required columns
+    required_columns = ['path'] if 'path' in df.columns else []
+    if not required_columns:
+        # Try to find path column with alternative names
+        path_columns = ['file_path', 'audio_path', 'filepath', 'audio_file', 'wav_path', 'wav_file']
+        for col in path_columns:
+            if col in df.columns:
+                df = df.rename(columns={col: 'path'})
+                required_columns = ['path']
+                break
+    
+    # If action and object columns exist, we'll create a label
+    if 'action' in df.columns and 'object' in df.columns:
+        required_columns.extend(['action', 'object'])
+    # If we have a label column already, add it to required columns
+    elif 'label' in df.columns or 'intent' in df.columns or 'class' in df.columns:
+        if 'intent' in df.columns:
+            df = df.rename(columns={'intent': 'label'})
+        if 'class' in df.columns and 'label' not in df.columns:
+            df = df.rename(columns={'class': 'label'})
+        required_columns.append('label')
+    
+    if not all(col in df.columns for col in required_columns):
+        missing = [col for col in required_columns if col not in df.columns]
+        logger.error(f"CSV file {csv_path} missing required columns: {missing}")
+        return None
+    
+    # Create label if needed
+    if 'label' not in df.columns and 'action' in df.columns and 'object' in df.columns:
+        df['label'] = df['action'] + '_' + df['object']
+    
+    # Normalize paths
     df['path'] = df['path'].apply(lambda p: normalize_audio_path(p, base_path))
-    df['label'] = df['action'] + '_' + df['object']
     
     # Validate audio files
     valid_files = []
-    logger.info(f"Validating {len(df)} audio files...")
-    
     for idx, row in tqdm(df.iterrows(), total=len(df), desc="Validating audio"):
         if validate_audio(row['path']):
             valid_files.append(idx)
+            
+    if len(valid_files) == 0:
+        logger.error(f"No valid audio files found in {csv_path}")
+        return None
             
     df = df.iloc[valid_files].reset_index(drop=True)
     logger.info(f"Kept {len(df)} valid audio files out of {len(valid_files)}")

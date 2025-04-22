@@ -1,39 +1,27 @@
-Test Accuracy: 0.3129
+Test Accuracy: 0.9667
 
-                              precision    recall  f1-score   support
+                         precision    recall  f1-score   support
 
-          activate lamp none       0.00      0.00      0.00        70
-     activate lights bedroom       0.22      0.05      0.08        97
-     activate lights kitchen       0.15      0.46      0.23       133
-        activate lights none       0.00      0.00      0.00        87
-    activate lights washroom       0.33      0.77      0.46       155
-         activate music none       0.60      0.21      0.32       121
-            bring juice none       0.49      0.29      0.37        65
-        bring newspaper none       0.82      0.11      0.20        79
-            bring shoes none       0.33      0.55      0.41        89
-            bring socks none       0.53      0.11      0.18        83
-change language Chinese none       0.19      0.75      0.30        75
-change language English none       0.20      0.04      0.06        57
- change language German none       0.12      0.08      0.10        59
- change language Korean none       0.13      0.04      0.06        57
-   change language none none       0.36      0.66      0.46       160
-        deactivate lamp none       0.00      0.00      0.00        74
-   deactivate lights bedroom       0.20      0.01      0.02        95
-   deactivate lights kitchen       0.35      0.47      0.40        96
-      deactivate lights none       0.50      0.02      0.04        85
-  deactivate lights washroom       0.00      0.00      0.00        77
-       deactivate music none       0.50      0.57      0.54       105
-       decrease heat bedroom       0.44      0.04      0.07       100
-       decrease heat kitchen       0.21      0.60      0.31        95
-          decrease heat none       0.17      0.15      0.16       176
-      decrease heat washroom       0.41      0.51      0.45       188
-        decrease volume none       0.33      0.31      0.32       345
-       increase heat bedroom       0.36      0.35      0.36       100
-       increase heat kitchen       0.33      0.13      0.19        99
-          increase heat none       0.63      0.07      0.13       172
-      increase heat washroom       0.43      0.27      0.33       203
-        increase volume none       0.37      0.52      0.43       396
+          activate_lamp       1.00      1.00      1.00        70
+        activate_lights       0.98      0.98      0.98       472
+         activate_music       0.87      0.90      0.89       121
+            bring_juice       0.98      1.00      0.99        65
+        bring_newspaper       0.95      0.99      0.97        79
+            bring_shoes       0.91      0.98      0.94        89
+            bring_socks       0.99      0.96      0.98        82
+change language_Chinese       0.97      0.97      0.97        75
+change language_English       0.90      0.98      0.94        57
+ change language_German       0.98      0.95      0.97        59
+ change language_Korean       0.98      0.88      0.93        57
+   change language_none       1.00      1.00      1.00       160
+        deactivate_lamp       1.00      1.00      1.00        74
+      deactivate_lights       0.98      0.97      0.98       353
+       deactivate_music       0.94      0.98      0.96       105
+          decrease_heat       0.96      0.97      0.96       553
+        decrease_volume       0.97      0.96      0.97       345
+          increase_heat       0.97      0.96      0.96       572
+        increase_volume       0.97      0.95      0.96       395
 
-                    accuracy                           0.31      3793
-                   macro avg       0.31      0.26      0.23      3793
-                weighted avg       0.34      0.31      0.27      3793
+               accuracy                           0.97      3783
+              macro avg       0.96      0.97      0.97      3783
+           weighted avg       0.97      0.97      0.97      3783

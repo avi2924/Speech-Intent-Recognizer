@@ -17,10 +17,17 @@ class CNNAudioGRU(nn.Module):
         # Dropout for regularization
         self.dropout = nn.Dropout(0.3)
         
+        # Calculate GRU input size based on CNN output
+        # This depends on your mel spectrogram dimensions and pooling
+        # For typical 64x200 input with 3 max pooling layers (2x2), the output would be
+        # channels: 128, height: 8, width: 25
+        # So self.gru_input_size = 128 * 8 = 1024
+        self.gru_input_size = 1024  # This must match the actual flattened CNN output
+        
         # GRU layer
         self.gru = nn.GRU(
-            input_size=128,
-            hidden_size=128,
+            input_size=self.gru_input_size,  # Changed from 128 to 1024
+            hidden_size=256,
             num_layers=2,
             batch_first=True,
             bidirectional=True,
@@ -28,10 +35,10 @@ class CNNAudioGRU(nn.Module):
         )
         
         # Attention mechanism
-        self.attention = nn.Linear(256, 1)
+        self.attention = nn.Linear(512, 1)  # 512 because bidirectional (256*2)
         
         # Output layer
-        self.fc = nn.Linear(256, num_classes)
+        self.fc = nn.Linear(512, num_classes)
         
     def forward(self, x):
         # Add channel dimension if needed
@@ -46,8 +53,9 @@ class CNNAudioGRU(nn.Module):
         x = F.relu(self.bn3(self.conv3(x)))
         x = F.max_pool2d(x, 2)
         
-        # Reshape for GRU
+        # Reshape for GRU - this is where the mismatch occurred
         b, c, h, w = x.size()
+        # Preserve the batch and time dimensions, but flatten the channels and frequency
         x = x.permute(0, 3, 1, 2).contiguous().view(b, w, c*h)
         
         # Apply dropout

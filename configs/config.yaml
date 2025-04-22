@@ -1,11 +1,18 @@
 # Dataset configuration
 dataset_path: "data/processed/processed.csv"
-num_labels: 31
+num_labels: 31  # This must match the model you trained (31 classes)
+
+# Data paths - UPDATE THESE with your actual paths
+train_csv: "data/FSC/fluent_speech_commands_dataset/data/train_data.csv"
+valid_csv: "data/FSC/fluent_speech_commands_dataset/data/valid_data.csv"
+test_csv: "data/FSC/fluent_speech_commands_dataset/data/test_data.csv"
+output_dir: "data/processed"
+label_map_path: "data/processed/label_map.json"
 
 # Training parameters
 epochs: 10
-batch_size: 8 # Adjust based on your GPU memory
-lr: 3e-4
+batch_size: 16 # Adjust based on your GPU memory
+lr: 0.0001
 val_split: 0.1
 early_stop_patience: 5
 

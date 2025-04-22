@@ -15,14 +15,25 @@ import argparse
 import json
 import numpy as np
 
+# Create logs directory if it doesn't exist
+os.makedirs('logs', exist_ok=True)
+
 # Set up logging
 logging.basicConfig(
-    filename="training.log",
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    filemode="a"
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("logs/training.log"),
+        logging.StreamHandler()  # Also log to console
+    ]
 )
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
+
+def log_gpu_memory(message=""):
+    if torch.cuda.is_available():
+        free_mem, total_mem = torch.cuda.mem_get_info()
+        used_mem = total_mem - free_mem
+        logger.info(f"{message} - GPU Memory: {used_mem/1024/1024:.1f}MB / {total_mem/1024/1024:.1f}MB")
 
 def collate_fn(batch):
     max_length = 200
@@ -57,10 +68,12 @@ def load_config(config_path):
     return config
 
 def train(args, config):
+    # Enable CUDA optimizations
+    torch.backends.cudnn.benchmark = True
+    
+    # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"Using device: {device}")
-    
-    torch.backends.cudnn.benchmark = True
     
     train_dataset = FSCIntentDataset(
         csv_path=args.train_csv,
@@ -74,13 +87,15 @@ def train(args, config):
     
     logger.info(f"Datasets loaded - Train: {len(train_dataset)}, Val: {len(val_dataset)}")
 
-    num_workers = config.get('num_workers', 0)
+    num_workers = config.get('num_workers', 4)
     train_loader = DataLoader(
         train_dataset, 
         batch_size=config['batch_size'], 
         shuffle=True, 
         num_workers=num_workers,
-        collate_fn=collate_fn
+        collate_fn=collate_fn,
+        pin_memory=True,  # Pin memory for faster transfers
+        prefetch_factor=2  # Prefetch batches
     )
     
     val_loader = DataLoader(
@@ -125,8 +140,10 @@ def train(args, config):
         all_preds, all_labels = [], []
         
         train_loader_tqdm = tqdm(train_loader, desc=f"Epoch {epoch+1}/{config['epochs']} (Train)")
-        for mel, label in train_loader_tqdm:
-            mel, label = mel.to(device), label.to(device)
+        for batch_idx, (mel, label) in enumerate(train_loader_tqdm):
+            # Move data to device immediately
+            mel = mel.to(device, non_blocking=True)  # non_blocking speeds up transfers
+            label = label.to(device, non_blocking=True)
             
             optimizer.zero_grad()
             output = model(mel)
