@@ -6,60 +6,55 @@ class CNNAudioGRU(nn.Module):
     def __init__(self, num_classes, input_channels=1):
         super(CNNAudioGRU, self).__init__()
         
-        # CNN layers
-        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1)
+        # CNN layers - GPU optimized with bias=False for better performance
+        self.conv1 = nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(32)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(64)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn3 = nn.BatchNorm2d(128)
         
-        # Dropout for regularization
-        self.dropout = nn.Dropout(0.3)
+        # Use inplace operations where possible for better memory efficiency
+        self.relu = nn.ReLU(inplace=True)
+        self.pool = nn.MaxPool2d(2)
+        self.dropout = nn.Dropout(0.5)
         
-        # Calculate GRU input size based on CNN output
-        # This depends on your mel spectrogram dimensions and pooling
-        # For typical 64x200 input with 3 max pooling layers (2x2), the output would be
-        # channels: 128, height: 8, width: 25
-        # So self.gru_input_size = 128 * 8 = 1024
-        self.gru_input_size = 1024  # This must match the actual flattened CNN output
+        # GRU input size
+        self.gru_input_size = 1024
         
         # GRU layer
         self.gru = nn.GRU(
-            input_size=self.gru_input_size,  # Changed from 128 to 1024
+            input_size=self.gru_input_size,
             hidden_size=256,
             num_layers=2,
             batch_first=True,
             bidirectional=True,
-            dropout=0.3
+            dropout=0.5
         )
         
         # Attention mechanism
-        self.attention = nn.Linear(512, 1)  # 512 because bidirectional (256*2)
+        self.attention = nn.Linear(512, 1)
         
-        # Output layer
+        # Final classification layer
         self.fc = nn.Linear(512, num_classes)
-        
+    
     def forward(self, x):
+        # Ensure input has right shape for GPU
+        batch_size = x.size(0)
+        
         # Add channel dimension if needed
         if len(x.shape) == 3:
             x = x.unsqueeze(1)
-            
-        # Apply convolutions with BatchNorm and ReLU
-        x = F.relu(self.bn1(self.conv1(x)))
-        x = F.max_pool2d(x, 2)
-        x = F.relu(self.bn2(self.conv2(x)))
-        x = F.max_pool2d(x, 2)
-        x = F.relu(self.bn3(self.conv3(x)))
-        x = F.max_pool2d(x, 2)
         
-        # Reshape for GRU - this is where the mismatch occurred
+        # CNN feature extraction with inplace operations
+        x = self.pool(self.relu(self.bn1(self.conv1(x))))
+        x = self.pool(self.relu(self.bn2(self.conv2(x))))
+        x = self.pool(self.relu(self.bn3(self.conv3(x))))
+        
+        # Reshape for GRU - use contiguous for better memory layout
         b, c, h, w = x.size()
-        # Preserve the batch and time dimensions, but flatten the channels and frequency
-        x = x.permute(0, 3, 1, 2).contiguous().view(b, w, c*h)
-        
-        # Apply dropout
-        x = self.dropout(x)
+        x = x.permute(0, 3, 1, 2).contiguous()
+        x = x.view(b, w, c*h)
         
         # Apply GRU
         x, _ = self.gru(x)

@@ -44,10 +44,10 @@ def run_pipeline(config_path):
     # This will print GPU memory usage for debugging
     def print_gpu_memory():
         if torch.cuda.is_available():
-            free_m, total_m = torch.cuda.mem_get_info()
-            free_m = free_m / 1024 / 1024
-            total_m = total_m / 1024 / 1024
-            logger.info(f"GPU Memory: {free_m:.0f}MB free / {total_m:.0f}MB total")
+            allocated_memory = torch.cuda.memory_allocated() / 1024 / 1024
+            reserved_memory = torch.cuda.memory_reserved() / 1024 / 1024
+            logger.info(f"GPU Memory: {allocated_memory:.0f}MB allocated / {reserved_memory:.0f}MB reserved")
+            logger.info(f"GPU Device: {torch.cuda.get_device_name(0)}")
     
     print_gpu_memory()
     
@@ -67,10 +67,9 @@ def run_pipeline(config_path):
     
     # Check if files exist and use fallbacks if needed
     if not os.path.exists(train_csv):
-        # Try to find alternative data file patterns with your actual paths
         potential_paths = [
-            'data/processed/train_data.csv',  # Already processed data
-            'data/FSC/fluent_speech_commands_dataset/data/train_data.csv',  # Your original data
+            'data/processed/train_data.csv',
+            'data/FSC/fluent_speech_commands_dataset/data/train_data.csv',
             'data/train_data.csv'
         ]
         for path in potential_paths:
@@ -112,11 +111,12 @@ def run_pipeline(config_path):
     if not all(os.path.exists(p) for p in [train_csv, valid_csv, test_csv]):
         logger.error("Could not find required data files. Please check your data paths.")
         return False
-        
-    # Step 1: Preprocess data
+    
+    # Step 1: Preprocess data (should be first)
     logger.info("=== STEP 1: DATA PREPROCESSING ===")
     logger.info("Starting: Data Preprocessing")
     
+    # Create output directory
     output_dir = config.get('output_dir', 'data/processed')
     os.makedirs(output_dir, exist_ok=True)
     
@@ -125,42 +125,79 @@ def run_pipeline(config_path):
         valid_csv=valid_csv,
         test_csv=test_csv,
         output_dir=output_dir,
-        label_map_path=config.get('label_map_path', os.path.join(output_dir, 'label_map.json'))
+        label_map_path=config.get('label_map_path', os.path.join(output_dir, 'label_map.json')),
+        use_torchaudio=True  # Use torchaudio for faster validation
     )
     
     if not preprocess_result:
-        logger.error("Data preprocessing failed. Stopping pipeline.")
+        logger.error("Preprocessing failed. Stopping pipeline.")
         return False
     
-    logger.info("Data Preprocessing completed successfully.")
-    
-    # Step 2: Train model
-    logger.info("=== STEP 2: TRAINING MODEL ===")
-    logger.info("Starting: Model Training")
-    
+    # Update paths with processed data
     train_csv = preprocess_result['train_csv']
-    val_csv = preprocess_result['valid_csv']
+    valid_csv = preprocess_result['valid_csv']
+    test_csv = preprocess_result['test_csv']
     label_map = preprocess_result['label_map']
+    
+    # Step 2: Precompute features (after preprocessing)
+    use_feature_cache = config.get('use_feature_cache', True)
+    if use_feature_cache:
+        logger.info("=== STEP 2: PRECOMPUTING FEATURES ===")
+        
+        cache_dir = config.get('cache_dir', 'data/cached_features')
+        os.makedirs(cache_dir, exist_ok=True)
+        
+        # Check if cached features already exist
+        train_cache_path = os.path.join(cache_dir, f"{os.path.basename(train_csv).replace('.csv', '')}_features.pt")
+        
+        # Only precompute if cache doesn't exist or force_precompute is True
+        if config.get('force_precompute', False) or not os.path.exists(train_cache_path):
+            logger.info("Starting: Feature Precomputation")
+            
+            precompute_cmd = (
+                f"python -m scripts.precompute_features "
+                f"--train_csv {train_csv} "
+                f"--valid_csv {valid_csv} "
+                f"--test_csv {test_csv} "
+                f"--output_dir {cache_dir} "
+                f"--label_map {label_map}"
+            )
+            
+            if not run_subprocess(precompute_cmd, "Feature Precomputation"):
+                # If feature precomputation fails, print more info but still continue
+                logger.warning("Feature precomputation failed. Will continue without cached features.")
+                logger.warning("This will make training slower but it should still work.")
+                config['use_feature_cache'] = False
+            else:
+                logger.info("Feature precomputation completed successfully")
+        else:
+            logger.info(f"Using existing cached features in {cache_dir}")
+    
+    # Step 3: Train model (was Step 2 before)
+    logger.info("=== STEP 3: TRAINING MODEL ===")
+    logger.info("Starting: Model Training")
     
     # Ensure output directory exists
     save_path = config.get('save_path', 'checkpoints')
     os.makedirs(save_path, exist_ok=True)
     
-    # Set environment for training
-    train_env = {
-        'PYTHONPATH': python_path
-    }
+    # Add cache info to training command
+    training_cmd = (
+        f"python -m scripts.train "
+        f"--config {config_path} "
+        f"--train_csv {train_csv} "
+        f"--val_csv {valid_csv} "
+        f"--label_map {label_map}"
+    )
     
-    training_cmd = f"python -m scripts.train --config {config_path} --train_csv {train_csv} --val_csv {val_csv} --label_map {label_map}"
-    if not run_subprocess(training_cmd, "Model Training", train_env):
+    if not run_subprocess(training_cmd, "Model Training", {'PYTHONPATH': python_path}):
         logger.error("Training failed. Stopping pipeline.")
         return False
     
-    # Step 3: Evaluate model
-    logger.info("=== STEP 3: EVALUATING MODEL ===")
+    # Step 4: Evaluate model
+    logger.info("=== STEP 4: EVALUATING MODEL ===")
     logger.info("Starting: Model Evaluation")
     
-    test_csv = preprocess_result['test_csv']
     model_path = os.path.join(config.get('save_path', 'checkpoints'), 'best_model.pt')
     
     # Check if the model exists
@@ -169,7 +206,7 @@ def run_pipeline(config_path):
         return False
     
     evaluation_cmd = f"python -m scripts.evaluate --config {config_path} --test_csv {test_csv} --label_map {label_map} --model_path {model_path}"
-    if not run_subprocess(evaluation_cmd, "Model Evaluation", train_env):
+    if not run_subprocess(evaluation_cmd, "Model Evaluation", {'PYTHONPATH': python_path}):
         logger.error("Evaluation failed. Stopping pipeline.")
         return False
     
@@ -179,6 +216,23 @@ def run_pipeline(config_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run the full Speech Intent Recognition pipeline')
     parser.add_argument('--config_path', type=str, default='configs/config.yaml', help='Path to config file')
+    parser.add_argument('--force_precompute', action='store_true', help='Force precomputation of features even if cache exists')
     args = parser.parse_args()
     
-    run_pipeline(args.config_path)
+    # If force_precompute is set via command line, update config
+    if args.force_precompute:
+        config = load_config(args.config_path)
+        config['force_precompute'] = True
+        
+        # Save updated config temporarily
+        temp_config_path = 'configs/temp_config.yaml'
+        with open(temp_config_path, 'w') as f:
+            yaml.dump(config, f)
+        
+        run_pipeline(temp_config_path)
+        
+        # Clean up temp config
+        if os.path.exists(temp_config_path):
+            os.remove(temp_config_path)
+    else:
+        run_pipeline(args.config_path)

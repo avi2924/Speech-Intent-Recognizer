@@ -1,6 +1,7 @@
 import os
 import sys
 import torch
+import torchaudio
 import logging
 import argparse
 import yaml
@@ -11,7 +12,6 @@ from tqdm import tqdm
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from torch.utils.data import DataLoader
 import json
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.dataset import FSCIntentDataset
 from models.models import CNNAudioGRU
@@ -52,7 +52,9 @@ def evaluate(args, config):
     test_dataset = FSCIntentDataset(
         csv_path=args.test_csv,
         label_map_path=args.label_map,
-        is_training=False
+        is_training=False,
+        use_cache=config.get('use_feature_cache', True),
+        cache_dir=config.get('cache_dir', 'data/cached_features')
     )
     
     # Get batch size from config or use a default

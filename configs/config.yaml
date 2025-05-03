@@ -1,27 +1,43 @@
 # Dataset configuration
 dataset_path: "data/processed/processed.csv"
-num_labels: 31  # This must match the model you trained (31 classes)
+num_labels: 31  # Number of intent classes
 
-# Data paths - UPDATE THESE with your actual paths
+# Dataset paths
 train_csv: "data/FSC/fluent_speech_commands_dataset/data/train_data.csv"
 valid_csv: "data/FSC/fluent_speech_commands_dataset/data/valid_data.csv"
 test_csv: "data/FSC/fluent_speech_commands_dataset/data/test_data.csv"
-output_dir: "data/processed"
 label_map_path: "data/processed/label_map.json"
 
-# Training parameters
+# Training parameters - optimized for 6GB VRAM
 epochs: 10
-batch_size: 16 # Adjust based on your GPU memory
-lr: 0.0001
-val_split: 0.1
+batch_size: 64  # Increased batch size (can be higher with caching)
+lr: 0.0003
+weight_decay: 0.0001
 early_stop_patience: 5
+early_stop_delta: 0.001
+grad_clip: 1.0
+
+# GPU optimizations
+use_amp: true
+num_workers: 8
+pin_memory: true
+prefetch_factor: 2  # Increased with feature caching
+persistent_workers: true
+empty_cache_freq: 15
+
+# Feature caching (new section)
+use_feature_cache: true
+cache_dir: "data/cached_features"
+force_precompute: false  # Set to true to regenerate cache
+precompute_batch_size: 32
 
 # Model configuration
-model_name: "facebook/wav2vec2-base-960h"
 save_path: "checkpoints/"
 
 # Data augmentation
 use_augmentation: true
+augment_prob: 0.7
+mixup_alpha: 0.2
 
 # Audio processing
 sample_rate: 16000
@@ -29,5 +45,5 @@ n_mels: 64
 mel_spec_length: 200
 
 # System settings
-num_workers: 4
 seed: 42
+gpu_id: 0  # Explicitly select first GPU
