@@ -9,9 +9,9 @@ test_csv: "data/FSC/fluent_speech_commands_dataset/data/test_data.csv"
 label_map_path: "data/processed/label_map.json"
 
 # Training parameters - optimized for 6GB VRAM
-epochs: 10
-batch_size: 64  # Increased batch size (can be higher with caching)
-lr: 0.0003
+epochs: 15
+batch_size: 16 # Increased batch size (can be higher with caching)
+lr: 0.00005
 weight_decay: 0.0001
 early_stop_patience: 5
 early_stop_delta: 0.001

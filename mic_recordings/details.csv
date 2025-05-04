@@ -1,0 +1,96 @@
+filename,text,class
+001_please decrease the volume.wav,please decrease the volume,decrease_volume
+002_i want to decrease the heat.wav,i want to decrease the heat,decrease_heat
+003_can you set the language to Korean.wav,can you set the language to Korean,change language_Korean
+004_can you get me the shoes from the bedroom.wav,can you get me the shoes from the bedroom,bring_shoes
+005_i need the newspaper.wav,i need the newspaper,bring_newspaper
+006_switch off the lamp.wav,switch off the lamp,deactivate_lamp
+007_can you get me the juice from the bedroom.wav,can you get me the juice from the bedroom,bring_juice
+008_can you turn off the lights.wav,can you turn off the lights,deactivate_lights
+009_please increase the heat.wav,please increase the heat,increase_heat
+010_switch on the lamp.wav,switch on the lamp,activate_lamp
+011_can you turn off the lights.wav,can you turn off the lights,deactivate_lights
+012_can you set the language to English.wav,can you set the language to English,change language_English
+013_please deactivate the lamp.wav,please deactivate the lamp,deactivate_lamp
+014_can you turn on the music.wav,can you turn on the music,activate_music
+015_switch the language to German.wav,switch the language to German,change language_German
+016_i want to activate the lamp.wav,i want to activate the lamp,activate_lamp
+017_i want to decrease the volume.wav,i want to decrease the volume,decrease_volume
+018_switch the language to none.wav,switch the language to none,change language_none
+019_i want to increase the heat.wav,i want to increase the heat,increase_heat
+020_please bring me the socks.wav,please bring me the socks,bring_socks
+021_can you turn on the lights.wav,can you turn on the lights,activate_lights
+022_i want to decrease the volume.wav,i want to decrease the volume,decrease_volume
+023_switch off the lamp.wav,switch off the lamp,deactivate_lamp
+024_can you turn down the volume.wav,can you turn down the volume,decrease_volume
+025_can you get me the socks from the living room.wav,can you get me the socks from the living room,bring_socks
+026_please activate the lamp.wav,please activate the lamp,activate_lamp
+027_raise the heat.wav,raise the heat,increase_heat
+028_please deactivate the lamp.wav,please deactivate the lamp,deactivate_lamp
+029_switch the language to Chinese.wav,switch the language to Chinese,change language_Chinese
+030_i want to activate the lights.wav,i want to activate the lights,activate_lights
+031_can you get me the socks from the living room.wav,can you get me the socks from the living room,bring_socks
+032_please activate the lamp.wav,please activate the lamp,activate_lamp
+033_i want to activate the lights.wav,i want to activate the lights,activate_lights
+034_i want to activate the music.wav,i want to activate the music,activate_music
+035_i want to activate the music.wav,i want to activate the music,activate_music
+036_can you set the language to none.wav,can you set the language to none,change language_none
+037_i want to decrease the heat.wav,i want to decrease the heat,decrease_heat
+038_i want to deactivate the music.wav,i want to deactivate the music,deactivate_music
+039_please bring me the newspaper from the living room.wav,please bring me the newspaper from the living room,bring_newspaper
+040_please change the language to German.wav,please change the language to German,change language_German
+041_i want to change the language to none.wav,i want to change the language to none,change language_none
+042_raise the volume.wav,raise the volume,increase_volume
+043_please decrease the volume.wav,please decrease the volume,decrease_volume
+044_switch on the music.wav,switch on the music,activate_music
+045_please bring me the socks.wav,please bring me the socks,bring_socks
+046_can you turn up the volume.wav,can you turn up the volume,increase_volume
+047_can you set the language to none.wav,can you set the language to none,change language_none
+048_can you set the language to English.wav,can you set the language to English,change language_English
+049_can you set the language to German.wav,can you set the language to German,change language_German
+050_please bring me the shoes.wav,please bring me the shoes,bring_shoes
+051_could you bring the shoes here from the kitchen.wav,could you bring the shoes here from the kitchen,bring_shoes
+052_could you bring the newspaper here from the living room.wav,could you bring the newspaper here from the living room,bring_newspaper
+053_switch off the music.wav,switch off the music,deactivate_music
+054_please decrease the heat.wav,please decrease the heat,decrease_heat
+055_please deactivate the music.wav,please deactivate the music,deactivate_music
+056_can you set the language to Korean.wav,can you set the language to Korean,change language_Korean
+057_i need the shoes from the living room.wav,i need the shoes from the living room,bring_shoes
+058_switch on the music.wav,switch on the music,activate_music
+059_i need the juice from the bedroom.wav,i need the juice from the bedroom,bring_juice
+060_i need the juice.wav,i need the juice,bring_juice
+061_please increase the volume.wav,please increase the volume,increase_volume
+062_i want to deactivate the lights.wav,i want to deactivate the lights,deactivate_lights
+063_can you set the language to Chinese.wav,can you set the language to Chinese,change language_Chinese
+064_can you turn off the music.wav,can you turn off the music,deactivate_music
+065_i want to decrease the heat.wav,i want to decrease the heat,decrease_heat
+066_please bring me the newspaper from the bedroom.wav,please bring me the newspaper from the bedroom,bring_newspaper
+067_can you set the language to German.wav,can you set the language to German,change language_German
+068_please change the language to Korean.wav,please change the language to Korean,change language_Korean
+069_please bring me the newspaper from the bedroom.wav,please bring me the newspaper from the bedroom,bring_newspaper
+070_please bring me the juice.wav,please bring me the juice,bring_juice
+071_can you turn off the music.wav,can you turn off the music,deactivate_music
+072_can you set the language to Chinese.wav,can you set the language to Chinese,change language_Chinese
+073_can you set the language to Korean.wav,can you set the language to Korean,change language_Korean
+074_please change the language to English.wav,please change the language to English,change language_English
+075_switch the language to Korean.wav,switch the language to Korean,change language_Korean
+076_i want to change the language to Chinese.wav,i want to change the language to Chinese,change language_Chinese
+077_can you turn off the lamp.wav,can you turn off the lamp,deactivate_lamp
+078_please change the language to Chinese.wav,please change the language to Chinese,change language_Chinese
+079_please bring me the juice.wav,please bring me the juice,bring_juice
+080_i want to change the language to English.wav,i want to change the language to English,change language_English
+081_lower the heat.wav,lower the heat,decrease_heat
+082_i want to change the language to English.wav,i want to change the language to English,change language_English
+083_can you turn on the lights.wav,can you turn on the lights,activate_lights
+084_raise the volume.wav,raise the volume,increase_volume
+085_i want to change the language to German.wav,i want to change the language to German,change language_German
+086_i need the shoes.wav,i need the shoes,bring_shoes
+087_i want to increase the heat.wav,i want to increase the heat,increase_heat
+088_please increase the heat.wav,please increase the heat,increase_heat
+089_i want to deactivate the lights.wav,i want to deactivate the lights,deactivate_lights
+090_switch off the lights.wav,switch off the lights,deactivate_lights
+091_can you turn on the lamp.wav,can you turn on the lamp,activate_lamp
+092_i want to change the language to none.wav,i want to change the language to none,change language_none
+093_i want to increase the volume.wav,i want to increase the volume,increase_volume
+094_i want to activate the lights.wav,i want to activate the lights,activate_lights
+095_can you get me the socks from the office.wav,can you get me the socks from the office,bring_socks

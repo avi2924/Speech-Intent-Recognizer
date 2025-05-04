@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import torch
-import librosa
+import torchaudio  # Replace librosa with torchaudio
 import numpy as np
 import argparse
 from pathlib import Path
@@ -48,7 +48,7 @@ def load_model(model_path, num_classes, device):
         return None
 
 def extract_features(audio_path):
-    """Extract mel spectrogram features from audio file"""
+    """Extract mel spectrogram features from audio file using torchaudio"""
     try:
         logger.info(f"Processing audio file: {audio_path}")
         
@@ -57,32 +57,45 @@ def extract_features(audio_path):
             logger.error(f"Audio file not found: {audio_path}")
             return None
             
-        # Load audio file
+        # Load audio file with torchaudio
         logger.info("Loading audio file...")
-        y, sr = librosa.load(audio_path, sr=16000)
-        logger.info(f"Audio loaded: duration={len(y)/sr:.2f}s, sample rate={sr}Hz")
+        waveform, sample_rate = torchaudio.load(audio_path)
         
-        # Extract mel spectrogram
+        # Convert to mono if needed
+        if waveform.shape[0] > 1:
+            waveform = torch.mean(waveform, dim=0, keepdim=True)
+        
+        # Resample to 16000 Hz if needed
+        if sample_rate != 16000:
+            resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
+            waveform = resampler(waveform)
+            sample_rate = 16000
+        
+        logger.info(f"Audio loaded: duration={waveform.shape[1]/sample_rate:.2f}s, sample rate={sample_rate}Hz")
+        
+        # Extract mel spectrogram using torchaudio
         logger.info("Extracting mel spectrogram...")
-        mel_spec = librosa.feature.melspectrogram(
-            y=y, 
-            sr=sr, 
-            n_fft=1024, 
-            hop_length=512, 
+        mel_transform = torchaudio.transforms.MelSpectrogram(
+            sample_rate=sample_rate,
+            n_fft=1024,
+            hop_length=512,
             n_mels=64
         )
         
-        # Convert to log scale
-        mel_spec = librosa.power_to_db(mel_spec, ref=np.max)
+        amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        
+        mel_spec = mel_transform(waveform)
+        mel_spec = amplitude_to_db(mel_spec)
+        
+        # Remove batch dimension
+        mel_spec = mel_spec.squeeze(0)
         
         # Normalize
-        mel_spec = (mel_spec - mel_spec.mean()) / (mel_spec.std() + 1e-8)
+        mel_spec = (mel_spec - mel_spec.mean()) / (mel_spec.std() + 1e-5)
         
-        # Convert to tensor
-        mel_spec = torch.FloatTensor(mel_spec)
         logger.info(f"Mel spectrogram shape: {mel_spec.shape}")
         
-        # Add batch dimension
+        # Add batch dimension back
         mel_spec = mel_spec.unsqueeze(0)
         
         return mel_spec

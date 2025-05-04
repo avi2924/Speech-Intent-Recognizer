@@ -1,27 +1,27 @@
-Test Accuracy: 0.4584
+Test Accuracy: 0.9477
 
                          precision    recall  f1-score   support
 
-          activate_lamp       0.00      0.00      0.00        70
-        activate_lights       0.42      0.41      0.42       472
-         activate_music       0.53      0.14      0.22       121
-            bring_juice       0.69      0.54      0.60        65
-        bring_newspaper       0.64      0.77      0.70        79
-            bring_shoes       0.51      0.79      0.62        89
-            bring_socks       0.59      0.78      0.67        82
-change language_Chinese       0.73      0.51      0.60        75
-change language_English       0.36      0.67      0.47        57
- change language_German       0.80      0.47      0.60        59
- change language_Korean       0.52      0.28      0.36        57
-   change language_none       0.61      0.61      0.61       160
-        deactivate_lamp       0.15      0.15      0.15        74
-      deactivate_lights       0.36      0.85      0.50       353
-       deactivate_music       0.54      0.72      0.62       105
-          decrease_heat       1.00      0.04      0.07       553
-        decrease_volume       0.81      0.13      0.23       345
-          increase_heat       0.45      0.84      0.59       572
-        increase_volume       0.44      0.35      0.39       395
+          activate_lamp       0.96      0.94      0.95        70
+        activate_lights       0.99      0.96      0.97       472
+         activate_music       0.97      0.93      0.95       121
+            bring_juice       0.93      1.00      0.96        65
+        bring_newspaper       1.00      0.99      0.99        79
+            bring_shoes       0.92      0.97      0.95        89
+            bring_socks       0.99      0.93      0.96        82
+change language_Chinese       0.99      0.97      0.98        75
+change language_English       0.92      0.98      0.95        57
+ change language_German       0.95      0.95      0.95        59
+ change language_Korean       0.96      0.88      0.92        57
+   change language_none       0.98      1.00      0.99       160
+        deactivate_lamp       0.97      0.99      0.98        74
+      deactivate_lights       0.98      0.98      0.98       353
+       deactivate_music       0.92      0.98      0.95       105
+          decrease_heat       0.97      0.93      0.95       553
+        decrease_volume       0.83      0.97      0.89       345
+          increase_heat       0.94      0.94      0.94       572
+        increase_volume       0.94      0.88      0.91       395
 
-               accuracy                           0.46      3783
-              macro avg       0.53      0.48      0.44      3783
-           weighted avg       0.57      0.46      0.40      3783
+               accuracy                           0.95      3783
+              macro avg       0.95      0.96      0.95      3783
+           weighted avg       0.95      0.95      0.95      3783

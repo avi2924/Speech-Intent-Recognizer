@@ -6,7 +6,6 @@ from torch.utils.data import DataLoader, Dataset
 import time
 
 def collate_fn_audio(batch):
-    """Custom collate function to handle variable-length audio files"""
     waveforms = []
     indices = []
     max_length = 0

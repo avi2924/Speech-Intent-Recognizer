@@ -1,0 +1,96 @@
+transcription,action,object,location,label
+please decrease the volume,decrease,volume,none,decrease_volume
+i want to decrease the heat,decrease,heat,none,decrease_heat
+can you set the language to Korean,change_language,korean,none,change language_Korean
+can you get me the shoes from the bedroom,bring,shoes,bedroom,bring_shoes
+i need the newspaper,bring,newspaper,none,bring_newspaper
+switch off the lamp,deactivate,lamp,none,deactivate_lamp
+can you get me the juice from the bedroom,bring,juice,bedroom,bring_juice
+can you turn off the lights,deactivate,lights,none,deactivate_lights
+please increase the heat,increase,heat,none,increase_heat
+switch on the lamp,activate,lamp,none,activate_lamp
+can you turn off the lights,deactivate,lights,none,deactivate_lights
+can you set the language to English,change_language,english,none,change language_English
+please deactivate the lamp,deactivate,lamp,none,deactivate_lamp
+can you turn on the music,activate,music,none,activate_music
+switch the language to German,change_language,german,none,change language_German
+i want to activate the lamp,activate,lamp,none,activate_lamp
+i want to decrease the volume,decrease,volume,none,decrease_volume
+switch the language to none,change_language,none,none,change language_none
+i want to increase the heat,increase,heat,none,increase_heat
+please bring me the socks,bring,socks,none,bring_socks
+can you turn on the lights,activate,lights,none,activate_lights
+i want to decrease the volume,decrease,volume,none,decrease_volume
+switch off the lamp,deactivate,lamp,none,deactivate_lamp
+can you turn down the volume,decrease,volume,none,decrease_volume
+can you get me the socks from the living room,bring,socks,living_room,bring_socks
+please activate the lamp,activate,lamp,none,activate_lamp
+raise the heat,increase,heat,none,increase_heat
+please deactivate the lamp,deactivate,lamp,none,deactivate_lamp
+switch the language to Chinese,change_language,chinese,none,change language_Chinese
+i want to activate the lights,activate,lights,none,activate_lights
+can you get me the socks from the living room,bring,socks,living_room,bring_socks
+please activate the lamp,activate,lamp,none,activate_lamp
+i want to activate the lights,activate,lights,none,activate_lights
+i want to activate the music,activate,music,none,activate_music
+i want to activate the music,activate,music,none,activate_music
+can you set the language to none,change_language,none,none,change language_none
+i want to decrease the heat,decrease,heat,none,decrease_heat
+i want to deactivate the music,deactivate,music,none,deactivate_music
+please bring me the newspaper from the living room,bring,newspaper,living_room,bring_newspaper
+please change the language to German,change_language,german,none,change language_German
+i want to change the language to none,change_language,none,none,change language_none
+raise the volume,increase,volume,none,increase_volume
+please decrease the volume,decrease,volume,none,decrease_volume
+switch on the music,activate,music,none,activate_music
+please bring me the socks,bring,socks,none,bring_socks
+can you turn up the volume,increase,volume,none,increase_volume
+can you set the language to none,change_language,none,none,change language_none
+can you set the language to English,change_language,english,none,change language_English
+can you set the language to German,change_language,german,none,change language_German
+please bring me the shoes,bring,shoes,none,bring_shoes
+could you bring the shoes here from the kitchen,bring,shoes,kitchen,bring_shoes
+could you bring the newspaper here from the living room,bring,newspaper,living_room,bring_newspaper
+switch off the music,deactivate,music,none,deactivate_music
+please decrease the heat,decrease,heat,none,decrease_heat
+please deactivate the music,deactivate,music,none,deactivate_music
+can you set the language to Korean,change_language,korean,none,change language_Korean
+i need the shoes from the living room,bring,shoes,living_room,bring_shoes
+switch on the music,activate,music,none,activate_music
+i need the juice from the bedroom,bring,juice,bedroom,bring_juice
+i need the juice,bring,juice,none,bring_juice
+please increase the volume,increase,volume,none,increase_volume
+i want to deactivate the lights,deactivate,lights,none,deactivate_lights
+can you set the language to Chinese,change_language,chinese,none,change language_Chinese
+can you turn off the music,deactivate,music,none,deactivate_music
+i want to decrease the heat,decrease,heat,none,decrease_heat
+please bring me the newspaper from the bedroom,bring,newspaper,bedroom,bring_newspaper
+can you set the language to German,change_language,german,none,change language_German
+please change the language to Korean,change_language,korean,none,change language_Korean
+please bring me the newspaper from the bedroom,bring,newspaper,bedroom,bring_newspaper
+please bring me the juice,bring,juice,none,bring_juice
+can you turn off the music,deactivate,music,none,deactivate_music
+can you set the language to Chinese,change_language,chinese,none,change language_Chinese
+can you set the language to Korean,change_language,korean,none,change language_Korean
+please change the language to English,change_language,english,none,change language_English
+switch the language to Korean,change_language,korean,none,change language_Korean
+i want to change the language to Chinese,change_language,chinese,none,change language_Chinese
+can you turn off the lamp,deactivate,lamp,none,deactivate_lamp
+please change the language to Chinese,change_language,chinese,none,change language_Chinese
+please bring me the juice,bring,juice,none,bring_juice
+i want to change the language to English,change_language,english,none,change language_English
+lower the heat,decrease,heat,none,decrease_heat
+i want to change the language to English,change_language,english,none,change language_English
+can you turn on the lights,activate,lights,none,activate_lights
+raise the volume,increase,volume,none,increase_volume
+i want to change the language to German,change_language,german,none,change language_German
+i need the shoes,bring,shoes,none,bring_shoes
+i want to increase the heat,increase,heat,none,increase_heat
+please increase the heat,increase,heat,none,increase_heat
+i want to deactivate the lights,deactivate,lights,none,deactivate_lights
+switch off the lights,deactivate,lights,none,deactivate_lights
+can you turn on the lamp,activate,lamp,none,activate_lamp
+i want to change the language to none,change_language,none,none,change language_none
+i want to increase the volume,increase,volume,none,increase_volume
+i want to activate the lights,activate,lights,none,activate_lights
+can you get me the socks from the office,bring,socks,office,bring_socks
